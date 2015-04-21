@@ -4,10 +4,10 @@ import javax.swing.*;
 
 public class AcademyApp {
     public static void main(String[] args) {
-//		final CounterModel model = new CounterModel();
-//		final CounterController controller = new CounterController(model);
-//		final CounterView view = new CounterView(model,controller);
-////		SwingUtilities.invokeLater(controller::initializeView);
-//		SwingUtilities.invokeLater(view::createAndShow);
+		final AcademyModel model = new AcademyModel();
+		final AcademyController controller = new AcademyController(model);
+		final AcademyView view = new AcademyView(model,controller);
+
+		SwingUtilities.invokeLater(view::createAndShow);
     }
 }
