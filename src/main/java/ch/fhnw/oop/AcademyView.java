@@ -18,7 +18,7 @@ public class AcademyView extends JFrame {
     private final AcademyController controller;
 
     public AcademyView(AcademyModel model, AcademyController controller) {
-        super("Action!");
+        super("Academy App");
         this.model = model;
         this.controller = controller;
     }
