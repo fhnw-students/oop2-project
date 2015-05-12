@@ -45,7 +45,7 @@ public class AcademyView extends JFrame {
     private JPanel layoutComponents() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-
+        setPreferredSize(new Dimension(1600, 800));
         return panel;
     }
 
