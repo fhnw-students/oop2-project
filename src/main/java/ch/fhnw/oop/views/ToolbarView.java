@@ -10,6 +10,10 @@ import java.net.URL;
 
 
 public class ToolbarView extends JToolBar {
+
+    static final private String ICON_PATH = "resources/icons/";
+    static final private String PNG_EXTENSION = ".png";
+
     private final AcademyModel model;
     private final AcademyController controller;
 
@@ -18,6 +22,8 @@ public class ToolbarView extends JToolBar {
     private JButton btnRemove;
     private JButton btnUndo;
     private JButton btnRedo;
+    private JToolBar buttons;
+    private JTextField searchField;
 
     public ToolbarView(AcademyModel model, AcademyController controller) {
         this.model = model;
@@ -30,22 +36,44 @@ public class ToolbarView extends JToolBar {
         initializeComponents();
         addEvents();
 
-        //first button
-        this.add(btnSave);
-        this.addSeparator();
-
+        // Main toolbar
+        this.setLayout(new BorderLayout());
         this.setFloatable(false);
         this.setRollover(true);
         this.setBackground(Color.darkGray);
         this.setVisible(true);
+
+        // Buttons
+        buttons.setFloatable(false);
+        buttons.setRollover(true);
+        buttons.setBackground(Color.darkGray);
+        buttons.setVisible(true);
+
+        buttons.add(btnSave);
+        buttons.addSeparator();
+        buttons.add(btnAdd);
+        buttons.add(btnRemove);
+        buttons.addSeparator();
+        buttons.add(btnRedo);
+        buttons.add(btnUndo);
+        this.add(buttons, BorderLayout.WEST);
+
+        // Search field
+//        searchField.setSize(100, 100);
+        this.add(searchField, BorderLayout.EAST);
+
     }
 
 
     private void initializeComponents() {
         btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
-        btnSave = makeNavigationButton("Redo", "save", "Redo changes", "Redo");
-        btnSave = makeNavigationButton("Undo", "save", "Undo changes", "Undo");
-        btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
+        btnAdd = makeNavigationButton("Plus", "add", "Add changes", "Add");
+        btnRemove = makeNavigationButton("Minus", "remove", "Remove changes", "Remove");
+        btnRedo = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
+        btnUndo = makeNavigationButton("Undo", "undo", "Undo changes", "Undo");
+
+        buttons = new JToolBar();
+        searchField = new JTextField(30);
 
     }
 
@@ -61,13 +89,13 @@ public class ToolbarView extends JToolBar {
                                            String toolTipText,
                                            String altText) {
         //Look for the image.
-        String imgLocation = "resources/icons/"
+        String imgLocation = ICON_PATH
                 + imageName
-                + ".png";
+                + PNG_EXTENSION;
 
-        String imgPressedLocation = "resources/icons/"
+        String imgPressedLocation = ICON_PATH
                 + imageName
-                + "_Pressed.png";
+                + "_Pressed" + PNG_EXTENSION;
 
         URL imageURL = AcademyApp.class.getResource(imgLocation);
         URL imagePressedURL = AcademyApp.class.getResource(imgPressedLocation);

@@ -28,7 +28,7 @@ public class AcademyView extends JFrame {
         JPanel contents = layoutComponents();
         addEvents();
 
-        setPreferredSize(new Dimension(1600, 800));
+        setPreferredSize(new Dimension(1400, 800));
 
         // Add Header Toolbar
         contents.add(toolbar, BorderLayout.PAGE_START);
