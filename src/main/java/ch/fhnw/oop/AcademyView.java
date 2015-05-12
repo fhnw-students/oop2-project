@@ -54,16 +54,6 @@ public class AcademyView extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(Color.gray);
-
-
-        /*
-        PAGE_START
-        PAGE_END
-        LINE_START
-        LINE_END
-        CENTER
-        */
-
         return panel;
     }
 
