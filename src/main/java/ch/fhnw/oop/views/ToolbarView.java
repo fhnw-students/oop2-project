@@ -1,10 +1,12 @@
 package ch.fhnw.oop.views;
 
+import ch.fhnw.oop.AcademyApp;
 import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 
 public class ToolbarView extends JToolBar {
@@ -12,6 +14,10 @@ public class ToolbarView extends JToolBar {
     private final AcademyController controller;
 
     private JButton btnSave;
+    private JButton btnAdd;
+    private JButton btnRemove;
+    private JButton btnUndo;
+    private JButton btnRedo;
 
     public ToolbarView(AcademyModel model, AcademyController controller) {
         this.model = model;
@@ -26,6 +32,7 @@ public class ToolbarView extends JToolBar {
 
         //first button
         this.add(btnSave);
+        this.addSeparator();
 
         this.setFloatable(false);
         this.setRollover(true);
@@ -35,36 +42,57 @@ public class ToolbarView extends JToolBar {
 
 
     private void initializeComponents() {
-        btnSave = new JButton("Save");
+        btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
+        btnSave = makeNavigationButton("Redo", "save", "Redo changes", "Redo");
+        btnSave = makeNavigationButton("Undo", "save", "Undo changes", "Undo");
+        btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
+
     }
-
-//    private JPanel layoutComponents() {
-//
-//        FlowLayout experimentLayout = new FlowLayout();
-//
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BorderLayout());
-//        panel.setBackground(Color.gray);
-//
-//
-//        /*
-//        PAGE_START
-//        PAGE_END
-//        LINE_START
-//        LINE_END
-//        CENTER
-//        */
-//
-//        return panel;
-//    }
-
-
-
 
     private void addEvents() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
         });
+    }
+
+
+    protected JButton makeNavigationButton(String imageName,
+                                           String actionCommand,
+                                           String toolTipText,
+                                           String altText) {
+        //Look for the image.
+        String imgLocation = "resources/icons/"
+                + imageName
+                + ".png";
+
+        String imgPressedLocation = "resources/icons/"
+                + imageName
+                + "_Pressed.png";
+
+        URL imageURL = AcademyApp.class.getResource(imgLocation);
+        URL imagePressedURL = AcademyApp.class.getResource(imgPressedLocation);
+
+        //Create and initialize the button.
+        JButton button = new JButton();
+        button.setActionCommand(actionCommand);
+        button.setToolTipText(toolTipText);
+//        button.addActionListener(this);
+
+        if (imageURL != null) {                      //image found
+            button.setIcon(new ImageIcon(imageURL, altText));
+            button.setPressedIcon(new ImageIcon(imagePressedURL, altText));
+        } else {                                     //no image found
+            button.setText(altText);
+            System.err.println("Resource not found: "
+                    + imgLocation);
+        }
+
+
+        button.setOpaque(false);
+        button.setBorderPainted(false);
+        button.setContentAreaFilled(false);
+
+        return button;
     }
 
 }
