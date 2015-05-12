@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-import ch.fhnw.oop.table.TableView;
-import ch.fhnw.oop.detail.DetailView;
+import ch.fhnw.oop.views.*;
 
 
 public class AcademyView extends JFrame {
     private JTable table;
     private JPanel detail;
-
+    private JToolBar toolbar;
+    private JSplitPane splitPane;
 
 
     private final AcademyModel model;
@@ -28,24 +28,42 @@ public class AcademyView extends JFrame {
         JPanel contents = layoutComponents();
         addEvents();
 
+        setPreferredSize(new Dimension(1600, 800));
+
+        // Add Header Toolbar
+        contents.add(toolbar, BorderLayout.PAGE_START);
+        contents.add(splitPane, BorderLayout.CENTER);
+
+
         add(contents);
+
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
-
     private void initializeComponents() {
+        toolbar = new ToolbarView(this.model, this.controller);
         table = new TableView(this.model, this.controller);
         detail = new DetailView(this.model, this.controller);
-        JSplitPane pane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, table, detail );
 
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, table, detail);
     }
 
     private JPanel layoutComponents() {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        setPreferredSize(new Dimension(1600, 800));
+        panel.setBackground(Color.gray);
+
+
+        /*
+        PAGE_START
+        PAGE_END
+        LINE_START
+        LINE_END
+        CENTER
+        */
+
         return panel;
     }
 
