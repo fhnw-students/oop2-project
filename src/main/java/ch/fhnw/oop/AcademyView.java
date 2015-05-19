@@ -32,7 +32,7 @@ public class AcademyView extends JFrame {
 
         // Add Header Toolbar
         contents.add(toolbar, BorderLayout.PAGE_START);
-        contents.add(splitPane, BorderLayout.CENTER);
+//        contents.add(splitPane, BorderLayout.CENTER);
 
 
         add(contents);
@@ -44,10 +44,10 @@ public class AcademyView extends JFrame {
 
     private void initializeComponents() {
         toolbar = new ToolbarView(this.model, this.controller);
-        table = new TableView(this.model, this.controller);
+//        table = new TableView(this.model, this.controller);
         detail = new DetailView(this.model, this.controller);
 
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, table, detail);
+//        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, table, detail);
     }
 
     private JPanel layoutComponents() {
