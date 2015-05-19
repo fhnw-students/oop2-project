@@ -3,57 +3,40 @@ package ch.fhnw.oop;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Stream;
 
 public class AcademyModel implements Observable {
 
-//    private static final String FILE_PATH = "/Users/HirschBookPro/Documents/fhnw/projects/oop2-project/out/ch/fhnw/oop/resources/data/movies.csv";
     private static final String FILE_PATH = "./resources/data/movies.csv";
-    private static final String DELIMITER_NEXT_ROW = "\\n";
-    private static final String DELIMITER_NEXT_COL = ";";
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
     private boolean isRedoAvailable = false;
 
-//    private ArrayList<String> data = new ArrayList<>();
-//    private Stream<String> stream;
 
-    private List<List<String>> data = new ArrayList<List<String>>();
+    private List<Movie> list = new ArrayList<>();
 
     public AcademyModel() throws IOException, URISyntaxException {
-        System.out.println(AcademyModel.class.getResource(FILE_PATH).toURI());
+        list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
 
-        data = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
-
-        System.out.println(data);
+        // Just for testing
+        System.out.println(list);
     }
 
-    private static List<List<String>> readCSVFile(URI csvFileName) throws IOException {
+    private static List<Movie> readCSVFile(URI csvFileName) throws IOException {
 
         String line = null;
         BufferedReader stream = null;
-        List<List<String>> csvData = new ArrayList<List<String>>();
+        List<Movie> csvData = new ArrayList<>();
 
         try {
             stream = new BufferedReader(new FileReader(new File(csvFileName)));
-            line = stream.readLine();
+            stream.readLine();
             while ((line = stream.readLine()) != null) {
-                String[] splitted = line.split(DELIMITER_NEXT_COL);
-                List<String> dataLine = new ArrayList<String>(splitted.length);
-
-                dataLine.add(" ");
-                for (String data : splitted)
-                    dataLine.add(data);
-
-                csvData.add(dataLine);
+                csvData.add(new Movie(line));
             }
 
         } catch (FileNotFoundException e) {
@@ -69,19 +52,6 @@ public class AcademyModel implements Observable {
 
         return csvData;
 
-    }
-
-    private InputStreamReader getInputStreamReader(String fileName) throws UnsupportedEncodingException {
-        InputStream inputStream = AcademyModel.class.getResourceAsStream(fileName);
-        return new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-    }
-
-    private Stream<String> getStreamOfLines(String fileName) {
-        try {
-            return Files.lines(Paths.get(AcademyModel.class.getResource(fileName).toURI()), StandardCharsets.UTF_8);
-        } catch (IOException | URISyntaxException e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     @Override
