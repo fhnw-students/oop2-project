@@ -21,7 +21,7 @@ public class Movie {
     private String titleEnglish;
     private String yearOfProduction;
     private String country;
-    private String duration;
+    private Integer duration;
     private String fsk;
     private String genre;
     private String startDate;
@@ -44,7 +44,7 @@ public class Movie {
         this.titleEnglish = splitted[5];
         this.yearOfProduction = splitted[6];
         this.country = splitted[7];
-        this.duration = splitted[8];
+        this.duration = Integer.parseInt(splitted[8]);
         this.fsk = splitted[9];
         this.genre = splitted[10];
         this.startDate = splitted[11];
