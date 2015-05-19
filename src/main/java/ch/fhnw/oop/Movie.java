@@ -136,7 +136,7 @@ public class Movie {
 
     public Integer getDuration() {
         return duration;
-    }gi
+    }
 
     public void setDuration(Integer duration) {
         this.duration = duration;
