@@ -134,11 +134,11 @@ public class Movie {
         hasModified = true;
     }
 
-    public String getDuration() {
+    public Integer getDuration() {
         return duration;
-    }
+    }gi
 
-    public void setDuration(String duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
         hasModified = true;
     }
