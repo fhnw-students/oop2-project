@@ -45,8 +45,7 @@ public class Movie {
         this.genre = splitted[10];
         this.startDate = splitted[11];
     }
-
-
+    
     /**
      * API
      */

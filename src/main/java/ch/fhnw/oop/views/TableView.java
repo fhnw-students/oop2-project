@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.net.URL;
 
 
 public class TableView extends JTable {
@@ -24,37 +25,21 @@ public class TableView extends JTable {
 
     }
 
-    public void createAndShow() {
-        initializeComponents();
-        JPanel contents = layoutComponents();
-        addEvents();
-
-        setBackground(Color.yellow);
-
-        add(contents);
-        setVisible(true);
-    }
-
-
-    private void initializeComponents() {
-
-    }
-
-    private JPanel layoutComponents() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        return panel;
-    }
-
-    private void addEvents() {
-        model.addObserver(m -> {
-            AcademyModel academyModel = (AcademyModel) m;
-        });
-    }
+//    private void addEvents() {
+//        model.addObserver(m -> {
+//            AcademyModel academyModel = (AcademyModel) m;
+//        });
+//    }
 
 
     class TableModel extends AbstractTableModel {
+
+        private final static String MARK_EMPTY = "../resources/marks/Mark_Empty.png";
+        private final static String MARK_BLUE = "../resources/marks/Mark_Blue.png";
+        private final static String MARK_GREEN = "../resources/marks/Mark_Green.png";
+        private final static String MARK_ORANGE = "../resources/marks/Mark_Orange.png";
+        private final static String MARK_RED = "../resources/marks/Mark_Red.png";
+        private final static String MARK_YELLOW = "../resources/marks/Mark_Yellow.png";
 
         private String[] columnNames = {
                 "",
@@ -83,7 +68,23 @@ public class TableView extends JTable {
         }
 
         public Object getValueAt(int row, int col) {
-            return model.getValueAt(row, col);
+            Object value = model.getValueAt(row, col);
+
+            if(col == 0){
+
+                String path = TableModel.MARK_EMPTY;
+                if(model.getRow(row).isHasModified()){
+                    path = TableModel.MARK_ORANGE;
+                }
+
+                URL imageURL = TableView.class.getResource(path);
+                ImageIcon imageIcon = new ImageIcon(imageURL);
+                return imageIcon;
+            }
+
+            return value;
+
+
         }
 
         public Class getColumnClass(int c) {

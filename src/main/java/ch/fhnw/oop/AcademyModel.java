@@ -21,12 +21,15 @@ public class AcademyModel implements Observable {
 
     public AcademyModel() throws IOException, URISyntaxException {
         list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
-
     }
 
 
     public List<Movie> getList(){
         return list;
+    }
+
+    public Movie getRow(int index) {
+        return list.get(index);
     }
 
     public String getValueAt(int index, int col) {
