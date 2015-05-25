@@ -22,13 +22,50 @@ public class AcademyModel implements Observable {
     public AcademyModel() throws IOException, URISyntaxException {
         list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
 
-        // Just for testing
-        System.out.println(list);
     }
+
+
+    public List<Movie> getList(){
+        return list;
+    }
+
+    public String getValueAt(int index, int col) {
+        Movie movie = list.get(index);
+        switch (col) {
+            case 0:
+                return movie.isHasModified() ? "X":"";
+            case 1:
+                return movie.getYearOfAward();
+            case 2:
+                return movie.getTitle();
+            case 3:
+                return movie.getDirector();
+            default:
+                return movie.getMainActor();
+        }
+    }
+
+    public void setValueAt(String value, int index, int col) {
+        Movie movie = list.get(index);
+        switch (col) {
+            case 0:
+                movie.setHasModified((value == "X"));
+            case 1:
+                movie.setYearOfAward(value);
+            case 2:
+                movie.setTitle(value);
+            case 3:
+                movie.setDirector(value);
+            default:
+                movie.setMainActor(value);
+        }
+    }
+
+
 
     private static List<Movie> readCSVFile(URI csvFileName) throws IOException {
 
-        String line = null;
+        String line;
         BufferedReader stream = null;
         List<Movie> csvData = new ArrayList<>();
 
@@ -54,6 +91,7 @@ public class AcademyModel implements Observable {
 
     }
 
+
     @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
@@ -63,6 +101,7 @@ public class AcademyModel implements Observable {
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
+
 
     private void notifyObservers() {
         observers.forEach(observer -> observer.update(this));
@@ -104,7 +143,5 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
-//    public Object[][] getList() {
-//        return data;
-//    }
+
 }
