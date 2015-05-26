@@ -36,6 +36,7 @@ public class DetailView extends JPanel {
     public DetailView(AcademyModel model, AcademyController controller) {
         this.model = model;
         this.controller = controller;
+        this.createAndShow();
     }
 
     public void createAndShow() {

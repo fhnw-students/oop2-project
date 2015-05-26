@@ -22,6 +22,7 @@ public class AcademyView extends JFrame {
         super("Academy App");
         this.model = model;
         this.controller = controller;
+
     }
 
     public void createAndShow() {
