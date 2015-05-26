@@ -1,8 +1,5 @@
 package ch.fhnw.oop;
 
-/**
- * Created by HirschBookPro on 19/05/15.
- */
 public class Movie {
 
     /**
@@ -26,7 +23,6 @@ public class Movie {
     private String genre;
     private String startDate;
 
-
     /**
      * Constructors
      */
@@ -49,8 +45,7 @@ public class Movie {
         this.genre = splitted[10];
         this.startDate = splitted[11];
     }
-
-
+    
     /**
      * API
      */
@@ -168,4 +163,5 @@ public class Movie {
         this.startDate = startDate;
         hasModified = true;
     }
+
 }
