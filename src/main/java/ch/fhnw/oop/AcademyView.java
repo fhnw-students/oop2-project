@@ -3,6 +3,8 @@ package ch.fhnw.oop;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import net.miginfocom.swing.MigLayout;
+
 
 import ch.fhnw.oop.views.*;
 
@@ -10,8 +12,10 @@ import ch.fhnw.oop.views.*;
 public class AcademyView extends JFrame {
     private JTable table;
     private JPanel detail;
+
     private JToolBar toolbar;
     private JSplitPane splitPane;
+
 
 
     private final AcademyModel model;
@@ -32,7 +36,13 @@ public class AcademyView extends JFrame {
 
         // Add Header Toolbar
         contents.add(toolbar, BorderLayout.PAGE_START);
-//        contents.add(splitPane, BorderLayout.CENTER);
+
+        // Add detail Frame
+        contents.add(detail, BorderLayout.EAST);
+
+
+
+ //      contents.add(splitPane, BorderLayout.CENTER);
 
 
         add(contents);
@@ -47,6 +57,8 @@ public class AcademyView extends JFrame {
 //        table = new TableView(this.model, this.controller);
         detail = new DetailView(this.model, this.controller);
 
+
+
 //        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, table, detail);
     }
 
@@ -54,6 +66,8 @@ public class AcademyView extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBackground(Color.gray);
+
+
         return panel;
     }
 

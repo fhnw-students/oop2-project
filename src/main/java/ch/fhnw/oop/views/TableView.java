@@ -60,7 +60,7 @@
 //                "",
 //                "Jahr",
 //                "Titel",
-//                "Reggiseur",
+//                "Regisseur",
 //                "Hauptdarsteller"
 //        };
 //        private final AcademyModel model;
