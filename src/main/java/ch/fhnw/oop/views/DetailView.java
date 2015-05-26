@@ -4,6 +4,7 @@ import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 import net.miginfocom.swing.MigLayout;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
