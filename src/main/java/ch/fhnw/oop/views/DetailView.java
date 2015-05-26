@@ -32,50 +32,62 @@ public class DetailView extends JPanel {
     private JLabel titleTitle;
     private JLabel titleRegisseur;
 
-
+    /**
+     * CONSTRUCTOR
+     */
     public DetailView(AcademyModel model, AcademyController controller) {
         this.model = model;
         this.controller = controller;
+        this.createAndShow();
+
+        this.setBackground(Color.black);
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+
     }
 
+    /**
+     * API
+     * ------------------------------------------
+     */
     public void createAndShow() {
-        initializeComponents();
-        JPanel contents = layoutComponents();
+        JPanel preview = initializePreviewPanel();
+        JPanel form = initializeFormPanel();
         addEvents();
 
-        this.setBackground(Color.blue);
 
-        this.add(contents);
+        this.add(preview);
+        this.add(form);
+
         this.setVisible(true);
     }
 
-
-    private void initializeComponents() {
-
-        ds_year = new JLabel();
-        ds_year.setFont(new Font("Arial",1,24));
-        ds_year.setText("bla");
-        ds_year.setHorizontalAlignment(CENTER);
-
-
-    }
-
-    private JPanel layoutComponents() {
+    /**
+     * @description
+     * View with the images, flags...
+     *
+     * @return JPanel
+     */
+    private JPanel initializePreviewPanel(){
         JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        JPanel detail_show = new JPanel(new MigLayout());
-        detail_show.add(ds_year);
-
-
-        JPanel detail_editor = new JPanel(new MigLayout());
-
-
-        panel.add(detail_show, BorderLayout.NORTH);
-        panel.add(detail_editor, BorderLayout.SOUTH);
+        panel.setBackground(Color.white);
         return panel;
     }
 
+    /**
+     * @description
+     * View with formular...
+     *
+     * @return JPanel
+     */
+    private JPanel initializeFormPanel(){
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.gray);
+        return panel;
+    }
+
+    /**
+     * EVENTS
+     */
     private void addEvents() {
 
         model.addObserver(m -> {
@@ -84,5 +96,32 @@ public class DetailView extends JPanel {
 
         });
     }
+
+
+    //    private void initializeComponents() {
+//
+//        ds_year = new JLabel();
+//        ds_year.setFont(new Font("Arial", 1, 24));
+//        ds_year.setText("bla");
+//        ds_year.setHorizontalAlignment(CENTER);
+//
+//
+//    }
+
+//    private JPanel layoutComponents() {
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new BorderLayout());
+//        panel.setBackground(Color.black);
+//
+//
+////        JPanel detail_show = new JPanel(new MigLayout());
+////        detail_show.add(ds_year);
+////        JPanel detail_editor = new JPanel(new MigLayout());
+////        panel.add(detail_show, BorderLayout.NORTH);
+////        panel.add(detail_editor, BorderLayout.SOUTH);
+//
+//
+//        return panel;
+//    }
 
 }

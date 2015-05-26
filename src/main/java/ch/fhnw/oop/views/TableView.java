@@ -22,7 +22,6 @@ public class TableView extends JTable {
         this.controller = controller;
         tableModel = new TableModel(model);
         setModel(tableModel);
-
     }
 
 //    private void addEvents() {
