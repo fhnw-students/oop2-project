@@ -2,11 +2,16 @@ package ch.fhnw.oop.views;
 
 import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
+import ch.fhnw.oop.Movie;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 
 
@@ -22,13 +27,25 @@ public class TableView extends JTable {
         this.controller = controller;
         tableModel = new TableModel(model);
         setModel(tableModel);
+
+        addEvents();
     }
 
-//    private void addEvents() {
+    private void addEvents() {
 //        model.addObserver(m -> {
 //            AcademyModel academyModel = (AcademyModel) m;
 //        });
-//    }
+
+
+        this.getSelectionModel().addListSelectionListener(event -> {
+            if (this.getSelectedRow() > -1) {
+                Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
+                this.model.setSelectedMovieId(selectedMovie.getId());
+            }
+        });
+
+
+    }
 
 
     class TableModel extends AbstractTableModel {
@@ -53,7 +70,6 @@ public class TableView extends JTable {
             this.model = model;
         }
 
-
         public int getColumnCount() {
             return columnNames.length;
         }
@@ -66,13 +82,19 @@ public class TableView extends JTable {
             return columnNames[col];
         }
 
+        public Movie getModel(int row) {
+            return model.getModel(row);
+        }
+
         public Object getValueAt(int row, int col) {
             Object value = model.getValueAt(row, col);
 
-            if(col == 0){
+            if (col == 0) {
 
                 String path = TableModel.MARK_EMPTY;
-                if(model.getRow(row).isHasModified()){
+                if (model.getRow(row).getId() == model.getSelectedMovieId()) {
+                    path = TableModel.MARK_BLUE;
+                } else if (model.getRow(row).isHasModified()) {
                     path = TableModel.MARK_ORANGE;
                 }
 

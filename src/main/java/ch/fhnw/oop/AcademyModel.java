@@ -16,13 +16,14 @@ public class AcademyModel implements Observable {
     private boolean isUndoAvailable = false;
     private boolean isRedoAvailable = false;
 
+    private int selectedMovieId;
 
     private List<Movie> list = new ArrayList<>();
 
     public AcademyModel() throws IOException, URISyntaxException {
         list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
+        selectedMovieId = list.get(0).getId();
     }
-
 
     public List<Movie> getList(){
         return list;
@@ -147,4 +148,16 @@ public class AcademyModel implements Observable {
     }
 
 
+    public int getSelectedMovieId() {
+        return selectedMovieId;
+    }
+
+    public void setSelectedMovieId(int selectedMovieId) {
+        this.selectedMovieId = selectedMovieId;
+    }
+
+    public Movie getModel(int row) {
+        Movie movie = list.get(row);
+        return movie;
+    }
 }
