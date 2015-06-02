@@ -18,7 +18,7 @@ public class DetailView extends JPanel {
     private final AcademyController controller;
 
 
-    // Attributes of detail_show
+    // Attributes of preview_panel
     private JLabel ds_year;
     private JLabel ds_title;
     private JLabel ds_regisseur;
@@ -27,10 +27,35 @@ public class DetailView extends JPanel {
     private JLabel oscars;
     private JLabel poster;
 
-    // Attributes of detail_editor
-    private JLabel titleYear;
-    private JLabel titleTitle;
-    private JLabel titleRegisseur;
+    // Attributes of show_panel
+    private JLabel sp_Year;
+    private JTextField sp_YearText;
+    private JLabel sp_Title;
+    private JTextField sp_TitleText;
+    private JLabel sp_Regisseur;
+    private JTextField sp_RegisseurText;
+    private JLabel sp_Actor;
+    private JTextField sp_ActorText;
+    private JLabel sp_TitleEng;
+    private JTextField sp_TitleEngText;
+    private JLabel sp_Genre;
+    private JTextField sp_GenreText;
+    private JLabel sp_ProductionYear;
+    private JTextField sp_ProductionYearText;
+    private JLabel sp_actor;
+    private JTextField sp_actorText;
+    private JLabel sp_Country;
+    private JTextField sp_CountryText;
+    private JLabel sp_Duration;
+    private JTextField sp_DurationText;
+    private JLabel sp_Fsk;
+    private JTextField sp_FskText;
+    private JLabel sp_ReleaseDate;
+    private JTextField sp_ReleaseDateText;
+    private JLabel sp_Oscars;
+    private JTextField sp_OscarsText;
+
+
 
     /**
      * CONSTRUCTOR
@@ -82,6 +107,21 @@ public class DetailView extends JPanel {
     private JPanel initializeFormPanel(){
         JPanel panel = new JPanel();
         panel.setBackground(Color.gray);
+        panel.setLayout(new MigLayout());
+
+        sp_Year = new JLabel("Jahr:");
+        panel.add(sp_Year, "width :100:");
+        sp_YearText = new JTextField();
+        panel.add(sp_YearText, "width :100:,wrap");
+
+        sp_Title = new JLabel("Titel:");
+        panel.add(sp_Title,"width :100:" );
+        sp_TitleText = new JTextField();
+        panel.add(sp_TitleText, "width :500:,wrap");
+
+
+
+
         return panel;
     }
 
