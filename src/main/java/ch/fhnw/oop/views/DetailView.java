@@ -19,13 +19,15 @@ public class DetailView extends JPanel {
 
 
     // Attributes of preview_panel
-    private JLabel ds_year;
-    private JLabel ds_title;
-    private JLabel ds_regisseur;
-    private JLabel ds_actors;
-    private JLabel flag;
-    private JLabel oscars;
-    private JLabel poster;
+    private JLabel pp_year;
+    private JLabel pp_title;
+    private JLabel pp_von;
+    private JLabel pp_mit;
+    private JLabel pp_regisseur;
+    private JLabel pp_actors;
+    private JLabel pp_flag;
+    private JLabel pp_oscars;
+    private JLabel pp_poster;
 
     // Attributes of show_panel
     private JLabel sp_Year;
@@ -42,8 +44,6 @@ public class DetailView extends JPanel {
     private JTextField sp_GenreText;
     private JLabel sp_ProductionYear;
     private JTextField sp_ProductionYearText;
-    private JLabel sp_actor;
-    private JTextField sp_actorText;
     private JLabel sp_Country;
     private JTextField sp_CountryText;
     private JLabel sp_Duration;
@@ -75,13 +75,14 @@ public class DetailView extends JPanel {
      * ------------------------------------------
      */
     public void createAndShow() {
+        this.setLayout(new BorderLayout());
         JPanel preview = initializePreviewPanel();
         JPanel form = initializeFormPanel();
         addEvents();
 
 
-        this.add(preview);
-        this.add(form);
+        this.add(preview,BorderLayout.NORTH);
+        this.add(form,BorderLayout.CENTER);
 
         this.setVisible(true);
     }
@@ -94,7 +95,41 @@ public class DetailView extends JPanel {
      */
     private JPanel initializePreviewPanel(){
         JPanel panel = new JPanel();
+        panel.setLayout(new MigLayout(
+                "",
+                "[grow][grow][grow]",
+                "[grow][grow][grow][grow][grow]"
+        ));
         panel.setBackground(Color.white);
+
+        pp_poster = new JLabel("Hallo");
+        panel.add(pp_poster, "dock east");
+
+
+        pp_oscars = new JLabel("2");
+        panel.add(pp_oscars, "dock south");
+
+        pp_year = new JLabel("3");
+        panel.add(pp_year,"");
+
+        pp_flag = new JLabel("4");
+        panel.add(pp_flag,"wrap,right");
+
+        pp_title = new JLabel("5");
+        panel.add(pp_title, "wrap");
+
+        pp_von = new JLabel("von");
+        panel.add(pp_von);
+
+        pp_regisseur = new JLabel("6");
+        panel.add(pp_regisseur, "wrap");
+
+        pp_mit = new JLabel("mit");
+        panel.add(pp_mit);
+
+        pp_actors = new JLabel("7");
+        panel.add(pp_actors, "wrap");
+
         return panel;
     }
 
@@ -112,15 +147,63 @@ public class DetailView extends JPanel {
         sp_Year = new JLabel("Jahr:");
         panel.add(sp_Year, "width :100:");
         sp_YearText = new JTextField();
-        panel.add(sp_YearText, "width :100:,wrap");
+        panel.add(sp_YearText, "width :100:,wrap,span 3");
+
 
         sp_Title = new JLabel("Titel:");
-        panel.add(sp_Title,"width :100:" );
+        panel.add(sp_Title, "width :100:");
         sp_TitleText = new JTextField();
-        panel.add(sp_TitleText, "width :500:,wrap");
+        panel.add(sp_TitleText, "width :500:,wrap,span 3");
 
+        sp_Regisseur = new JLabel("Regisseur:");
+        panel.add(sp_Regisseur,"width :100:" );
+        sp_RegisseurText = new JTextField();
+        panel.add(sp_RegisseurText, "width :500:,wrap,span 3");
 
+        sp_Actor = new JLabel("Hauptdarsteller:");
+        panel.add(sp_Actor,"width :100:" );
+        sp_ActorText = new JTextField();
+        panel.add(sp_ActorText, "width :500:,wrap,span 3");
 
+        sp_TitleEng = new JLabel("Titel (eng):");
+        panel.add(sp_TitleEng,"width :100:" );
+        sp_TitleEngText = new JTextField();
+        panel.add(sp_TitleEngText, "width :500:,wrap,span 3");
+
+        sp_Genre = new JLabel("Genre:");
+        panel.add(sp_Genre,"width :100:" );
+        sp_GenreText = new JTextField();
+        panel.add(sp_GenreText, "width :100:");
+
+        sp_ProductionYear = new JLabel("Produktionsjahr:");
+        panel.add(sp_ProductionYear,"width :100:,gapleft 100" );
+        sp_ProductionYearText = new JTextField();
+        panel.add(sp_ProductionYearText, "width :100:,wrap,right");
+
+        sp_Country = new JLabel("Land:");
+        panel.add(sp_Country,"width :100:" );
+        sp_CountryText = new JTextField();
+        panel.add(sp_CountryText, "width :100:");
+
+        sp_Duration = new JLabel("Spieldauer:");
+        panel.add(sp_Duration,"width :100:,gapleft 100" );
+        sp_DurationText = new JTextField();
+        panel.add(sp_DurationText, "width :100:,wrap,right");
+
+        sp_Fsk = new JLabel("FSK:");
+        panel.add(sp_Fsk,"width :100:" );
+        sp_FskText = new JTextField();
+        panel.add(sp_FskText, "width :100:");
+
+        sp_ReleaseDate = new JLabel("Releasedatum:");
+        panel.add(sp_ReleaseDate,"width :100:,gapleft 100" );
+        sp_ReleaseDateText = new JTextField();
+        panel.add(sp_ReleaseDateText, "width :100:,wrap,right");
+
+        sp_Oscars = new JLabel("Oscars:");
+        panel.add(sp_Oscars,"width :100:" );
+        sp_OscarsText = new JTextField();
+        panel.add(sp_OscarsText, "width :100:");
 
         return panel;
     }
