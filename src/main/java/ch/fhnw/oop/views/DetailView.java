@@ -2,6 +2,7 @@ package ch.fhnw.oop.views;
 
 import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
+import ch.fhnw.oop.Movie;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -9,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.*;
+import java.util.List;
 
 import static javax.swing.SwingConstants.CENTER;
 
@@ -23,7 +26,7 @@ public class DetailView extends JPanel {
     private JLabel pp_title;
     private JLabel pp_von;
     private JLabel pp_mit;
-    private JLabel pp_regisseur;
+    private JLabel pp_director;
     private JLabel pp_actors;
     private JLabel pp_flag;
     private JLabel pp_oscars;
@@ -81,8 +84,8 @@ public class DetailView extends JPanel {
         addEvents();
 
 
-        this.add(preview,BorderLayout.NORTH);
-        this.add(form,BorderLayout.CENTER);
+        this.add(preview, BorderLayout.NORTH);
+        this.add(form, BorderLayout.CENTER);
 
         this.setVisible(true);
     }
@@ -97,40 +100,51 @@ public class DetailView extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout(
                 "",
-                "[grow][grow][grow]",
+                "[][grow][grow]",
                 "[grow][grow][grow][grow][grow]"
         ));
         panel.setBackground(Color.white);
 
-        pp_poster = new JLabel("Hallo");
+        pp_poster = new JLabel("Hier kommt das Poster hin");
         panel.add(pp_poster, "dock east");
 
 
-        pp_oscars = new JLabel("2");
+        pp_oscars = new JLabel("Hier zeigt es die Anzahl Oscars an");
         panel.add(pp_oscars, "dock south");
 
-        pp_year = new JLabel("3");
+        pp_year = new JLabel("");
         panel.add(pp_year,"");
 
-        pp_flag = new JLabel("4");
+        pp_flag = new JLabel("Country Flags");
         panel.add(pp_flag,"wrap,right");
 
-        pp_title = new JLabel("5");
+        pp_title = new JLabel("");
         panel.add(pp_title, "wrap");
 
         pp_von = new JLabel("von");
         panel.add(pp_von);
 
-        pp_regisseur = new JLabel("6");
-        panel.add(pp_regisseur, "wrap");
+        pp_director = new JLabel("");
+        panel.add(pp_director, "wrap");
 
         pp_mit = new JLabel("mit");
         panel.add(pp_mit);
 
-        pp_actors = new JLabel("7");
+        pp_actors = new JLabel("");
         panel.add(pp_actors, "wrap");
 
+        showDataPreviewPanel(model.getList(),model.getSelectedMovieId());
         return panel;
+    }
+
+    public void showDataPreviewPanel(List<Movie> list,int index){
+        Movie movie = list.get(index);
+
+        pp_year.setText(movie.getYearOfProduction()) ;
+        pp_title.setText(movie.getTitle());
+        pp_director.setText(movie.getDirector());
+        pp_actors.setText(movie.getMainActor());
+
     }
 
     /**
@@ -218,6 +232,9 @@ public class DetailView extends JPanel {
 
 
         });
+
+
+
     }
 
 
