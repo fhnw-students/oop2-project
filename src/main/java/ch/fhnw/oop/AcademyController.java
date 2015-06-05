@@ -1,6 +1,8 @@
 package ch.fhnw.oop;
 
 
+import ch.fhnw.oop.views.DetailView;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -54,5 +56,8 @@ public class AcademyController {
 		model.setUndoAvailable(!undoStack.isEmpty());
 	}
 
+	public void updateView(){
+		view.createAndShow();
+	}
 
 }

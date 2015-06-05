@@ -41,7 +41,7 @@ public class TableView extends JTable {
             if (this.getSelectedRow() > -1) {
                 Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
                 this.model.setSelectedMovieId(selectedMovie.getId());
-                
+                controller.updateView();
 
             }
         });
