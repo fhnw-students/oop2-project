@@ -22,6 +22,7 @@ public class Movie {
     private String fsk;
     private String genre;
     private String startDate;
+    private String numberOfOscars ="0";
 
     /**
      * Constructors
@@ -163,5 +164,14 @@ public class Movie {
         this.startDate = startDate;
         hasModified = true;
     }
+
+    public String getNumberOfOscars(){
+        return this.numberOfOscars;
+    }
+
+    public void setNumberOfOscars(String numberOfOscars){
+        this.numberOfOscars = numberOfOscars;
+    }
+
 
 }

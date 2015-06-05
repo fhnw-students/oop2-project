@@ -37,8 +37,8 @@ public class DetailView extends JPanel {
     private JTextField sp_YearText;
     private JLabel sp_Title;
     private JTextField sp_TitleText;
-    private JLabel sp_Regisseur;
-    private JTextField sp_RegisseurText;
+    private JLabel sp_director;
+    private JTextField sp_directorText;
     private JLabel sp_Actor;
     private JTextField sp_ActorText;
     private JLabel sp_TitleEng;
@@ -88,6 +88,7 @@ public class DetailView extends JPanel {
         this.add(form, BorderLayout.CENTER);
 
         this.setVisible(true);
+        showData(model.getList(), model.getSelectedMovieId());
     }
 
     /**
@@ -133,19 +134,10 @@ public class DetailView extends JPanel {
         pp_actors = new JLabel("");
         panel.add(pp_actors, "wrap");
 
-        showDataPreviewPanel(model.getList(),model.getSelectedMovieId());
         return panel;
     }
 
-    public void showDataPreviewPanel(List<Movie> list,int index){
-        Movie movie = list.get(index);
 
-        pp_year.setText(movie.getYearOfProduction()) ;
-        pp_title.setText(movie.getTitle());
-        pp_director.setText(movie.getDirector());
-        pp_actors.setText(movie.getMainActor());
-
-    }
 
     /**
      * @description
@@ -169,10 +161,10 @@ public class DetailView extends JPanel {
         sp_TitleText = new JTextField();
         panel.add(sp_TitleText, "width :500:,wrap,span 3");
 
-        sp_Regisseur = new JLabel("Regisseur:");
-        panel.add(sp_Regisseur,"width :100:" );
-        sp_RegisseurText = new JTextField();
-        panel.add(sp_RegisseurText, "width :500:,wrap,span 3");
+        sp_director = new JLabel("Regisseur:");
+        panel.add(sp_director,"width :100:" );
+        sp_directorText = new JTextField();
+        panel.add(sp_directorText, "width :500:,wrap,span 3");
 
         sp_Actor = new JLabel("Hauptdarsteller:");
         panel.add(sp_Actor,"width :100:" );
@@ -238,6 +230,29 @@ public class DetailView extends JPanel {
     }
 
 
+    public void showData(List<Movie> list,int index){
+        Movie movie = list.get(index);
+
+        pp_year.setText(movie.getYearOfAward()) ;
+        pp_title.setText(movie.getTitle());
+        pp_director.setText(movie.getDirector());
+        pp_actors.setText(movie.getMainActor());
+
+        sp_YearText.setText(movie.getYearOfAward());
+        sp_TitleText.setText(movie.getTitle());
+        sp_directorText.setText(movie.getDirector());
+        sp_ActorText.setText(movie.getMainActor());
+        sp_TitleEngText.setText(movie.getTitleEnglish());
+        sp_GenreText.setText(movie.getGenre());
+        sp_ProductionYearText.setText(movie.getYearOfProduction());
+        sp_CountryText.setText(movie.getCountry());
+        sp_DurationText.setText(movie.getDuration().toString());
+        sp_FskText.setText(movie.getFsk());
+        sp_ReleaseDateText.setText(movie.getYearOfProduction());
+        sp_OscarsText.setText(movie.getNumberOfOscars());
+
+
+    }
     //    private void initializeComponents() {
 //
 //        ds_year = new JLabel();
