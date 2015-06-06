@@ -9,8 +9,7 @@ import sun.jvm.hotspot.types.JIntField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
@@ -60,9 +59,6 @@ public class DetailView extends JPanel {
     private JTextField sp_OscarsText;
 
 
-
-
-
     /**
      * CONSTRUCTOR
      */
@@ -85,6 +81,7 @@ public class DetailView extends JPanel {
         JPanel preview = initializePreviewPanel();
         JPanel form = initializeFormPanel();
         addEvents();
+        addObservers();
 
 
         this.add(preview, BorderLayout.NORTH);
@@ -95,12 +92,10 @@ public class DetailView extends JPanel {
     }
 
     /**
-     * @description
-     * View with the images, flags...
-     *
      * @return JPanel
+     * @description View with the images, flags...
      */
-    private JPanel initializePreviewPanel(){
+    private JPanel initializePreviewPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout(
                 "",
@@ -112,17 +107,14 @@ public class DetailView extends JPanel {
         pp_poster = new JLabel("Hier kommt das Poster hin");
         panel.add(pp_poster, "dock east");
 
-
-
         pp_oscars = new JLabel("Anzahl Oscars");
         panel.add(pp_oscars, "dock south");
 
-
         pp_year = new JLabel("");
-        panel.add(pp_year,"");
+        panel.add(pp_year, "");
 
         pp_flag = new JLabel("Country Flags");
-        panel.add(pp_flag,"wrap,right");
+        panel.add(pp_flag, "wrap,right");
 
         pp_title = new JLabel("");
         panel.add(pp_title, "wrap");
@@ -143,14 +135,11 @@ public class DetailView extends JPanel {
     }
 
 
-
     /**
-     * @description
-     * View with formular...
-     *
      * @return JPanel
+     * @description View with formular...
      */
-    private JPanel initializeFormPanel(){
+    private JPanel initializeFormPanel() {
         JPanel panel = new JPanel();
         panel.setBackground(Color.gray);
         panel.setLayout(new MigLayout());
@@ -160,59 +149,58 @@ public class DetailView extends JPanel {
         sp_YearText = new JTextField();
         panel.add(sp_YearText, "width :100:,wrap,span 3");
 
-
         sp_Title = new JLabel("Titel:");
         panel.add(sp_Title, "width :100:");
         sp_TitleText = new JTextField();
         panel.add(sp_TitleText, "width :500:,wrap,span 3");
 
         sp_director = new JLabel("Regisseur:");
-        panel.add(sp_director,"width :100:" );
+        panel.add(sp_director, "width :100:");
         sp_directorText = new JTextField();
         panel.add(sp_directorText, "width :500:,wrap,span 3");
 
         sp_Actor = new JLabel("Hauptdarsteller:");
-        panel.add(sp_Actor,"width :100:" );
+        panel.add(sp_Actor, "width :100:");
         sp_ActorText = new JTextField();
         panel.add(sp_ActorText, "width :500:,wrap,span 3");
 
         sp_TitleEng = new JLabel("Titel (eng):");
-        panel.add(sp_TitleEng,"width :100:" );
+        panel.add(sp_TitleEng, "width :100:");
         sp_TitleEngText = new JTextField();
         panel.add(sp_TitleEngText, "width :500:,wrap,span 3");
 
         sp_Genre = new JLabel("Genre:");
-        panel.add(sp_Genre,"width :100:" );
+        panel.add(sp_Genre, "width :100:");
         sp_GenreText = new JTextField();
         panel.add(sp_GenreText, "width :100:");
 
         sp_ProductionYear = new JLabel("Produktionsjahr:");
-        panel.add(sp_ProductionYear,"width :100:,gapleft 100" );
+        panel.add(sp_ProductionYear, "width :100:,gapleft 100");
         sp_ProductionYearText = new JTextField();
         panel.add(sp_ProductionYearText, "width :100:,wrap,right");
 
         sp_Country = new JLabel("Land:");
-        panel.add(sp_Country,"width :100:" );
+        panel.add(sp_Country, "width :100:");
         sp_CountryText = new JTextField();
         panel.add(sp_CountryText, "width :100:");
 
         sp_Duration = new JLabel("Spieldauer:");
-        panel.add(sp_Duration,"width :100:,gapleft 100" );
+        panel.add(sp_Duration, "width :100:,gapleft 100");
         sp_DurationText = new JTextField();
         panel.add(sp_DurationText, "width :100:,wrap,right");
 
         sp_Fsk = new JLabel("FSK:");
-        panel.add(sp_Fsk,"width :100:" );
+        panel.add(sp_Fsk, "width :100:");
         sp_FskText = new JTextField();
         panel.add(sp_FskText, "width :100:");
 
         sp_ReleaseDate = new JLabel("Releasedatum:");
-        panel.add(sp_ReleaseDate,"width :100:,gapleft 100" );
+        panel.add(sp_ReleaseDate, "width :100:,gapleft 100");
         sp_ReleaseDateText = new JTextField();
         panel.add(sp_ReleaseDateText, "width :100:,wrap,right");
 
         sp_Oscars = new JLabel("Oscars:");
-        panel.add(sp_Oscars,"width :100:" );
+        panel.add(sp_Oscars, "width :100:");
         sp_OscarsText = new JTextField();
         panel.add(sp_OscarsText, "width :100:");
 
@@ -224,21 +212,52 @@ public class DetailView extends JPanel {
      */
     private void addEvents() {
 
-        model.addObserver(m -> {
-            AcademyModel academyModel = (AcademyModel) m;
-
-
+        sp_TitleText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.setValueAtSelectedRow(sp_TitleText.getText(), TableView.TableModel.COL_TITLE);
+            }
         });
 
+        sp_YearText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.setValueAtSelectedRow(sp_YearText.getText(), TableView.TableModel.COL_YEAR);
+            }
+        });
+
+        sp_directorText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.setValueAtSelectedRow(sp_directorText.getText(), TableView.TableModel.COL_DIRECTOR);
+            }
+        });
+
+        sp_ActorText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.setValueAtSelectedRow(sp_ActorText.getText(), TableView.TableModel.COL_MAIN_ACTOR);
+            }
+        });
 
 
     }
 
+    public void addObservers(){
+        model.addObserver(m -> {
+            AcademyModel academyModel = (AcademyModel) m;
 
-    public void showData(List<Movie> list,int index){
+
+
+
+        });
+    }
+
+
+    public void showData(List<Movie> list, int index) {
         Movie movie = list.get(index);
 
-        pp_year.setText(movie.getYearOfAward()) ;
+        pp_year.setText(movie.getYearOfAward());
         pp_title.setText(movie.getTitle());
         pp_director.setText(movie.getDirector());
         pp_actors.setText(movie.getMainActor());

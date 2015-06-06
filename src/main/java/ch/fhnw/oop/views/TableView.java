@@ -16,10 +16,12 @@ import java.net.URL;
 
 
 public class TableView extends JTable {
+
+
+
     private final AcademyModel model;
     private final AcademyController controller;
-
-    private final TableModel tableModel;
+    private TableModel tableModel;
 
 
     public TableView(AcademyModel model, AcademyController controller) {
@@ -29,35 +31,46 @@ public class TableView extends JTable {
         setModel(tableModel);
 
         addEvents();
+        addObservers();
     }
 
     private void addEvents() {
-//        model.addObserver(m -> {
-//            AcademyModel academyModel = (AcademyModel) m;
-//        });
-
 
         this.getSelectionModel().addListSelectionListener(event -> {
             if (this.getSelectedRow() > -1) {
                 Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
                 this.model.setSelectedMovieId(selectedMovie.getId());
                 controller.initializeView();
-
             }
         });
 
 
     }
 
+    public void addObservers() {
+        model.addObserver(m -> {
+            AcademyModel academyModel = (AcademyModel) m;
+
+            for (int i = 0; i < 5; i++) {
+                tableModel.fireTableCellUpdated(academyModel.getSelectedMovieId(), i);
+            }
+
+        });
+    }
+
 
     class TableModel extends AbstractTableModel {
+        public final static String MARK_EMPTY = "../resources/marks/Mark_Empty.png";
+        public final static String MARK_BLUE = "../resources/marks/Mark_Blue.png";
+        public final static String MARK_GREEN = "../resources/marks/Mark_Green.png";
+        public final static String MARK_ORANGE = "../resources/marks/Mark_Orange.png";
+        public final static String MARK_RED = "../resources/marks/Mark_Red.png";
+        public final static String MARK_YELLOW = "../resources/marks/Mark_Yellow.png";
 
-        private final static String MARK_EMPTY = "../resources/marks/Mark_Empty.png";
-        private final static String MARK_BLUE = "../resources/marks/Mark_Blue.png";
-        private final static String MARK_GREEN = "../resources/marks/Mark_Green.png";
-        private final static String MARK_ORANGE = "../resources/marks/Mark_Orange.png";
-        private final static String MARK_RED = "../resources/marks/Mark_Red.png";
-        private final static String MARK_YELLOW = "../resources/marks/Mark_Yellow.png";
+        public final static int COL_YEAR = 1;
+        public final static int COL_TITLE = 2;
+        public final static int COL_DIRECTOR = 3;
+        public final static int COL_MAIN_ACTOR = 4;
 
         private String[] columnNames = {
                 "",
