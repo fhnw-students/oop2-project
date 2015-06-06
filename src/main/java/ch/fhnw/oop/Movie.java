@@ -1,5 +1,7 @@
 package ch.fhnw.oop;
 
+import javax.swing.*;
+
 public class Movie {
 
     /**
@@ -22,7 +24,8 @@ public class Movie {
     private String fsk;
     private String genre;
     private String startDate;
-    private Integer numberOfOscars =5;
+    private Integer numberOfOscars =1;
+    private ImageIcon poster;
 
     /**
      * Constructors
@@ -172,6 +175,14 @@ public class Movie {
     public void setNumberOfOscars(int numberOfOscars){
         this.numberOfOscars = numberOfOscars;
         this.hasModified = true;
+    }
+
+    public void setPoster(ImageIcon poster){
+        this.poster = poster;
+    }
+
+    public ImageIcon getPoster(){
+        return this.poster;
     }
 
 

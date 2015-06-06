@@ -28,7 +28,7 @@ public class DetailView extends JPanel {
     private JLabel pp_mit;
     private JLabel pp_director;
     private JLabel pp_actors;
-    private JLabel pp_flag;
+    private JPanel pp_flag;
     private JPanel pp_oscars;
     private JLabel pp_poster;
 
@@ -99,12 +99,12 @@ public class DetailView extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout(
                 "",
-                "[grow][grow][grow]",
-                "[grow][grow][grow][grow][grow]"
+                "[][][]",
+                "[][][][][]"
         ));
         panel.setBackground(Color.white);
 
-        pp_poster = new JLabel("Hier kommt das Poster hin");
+        pp_poster = new JLabel();
         panel.add(pp_poster, "dock east");
 
         pp_oscars = new JPanel();
@@ -115,7 +115,9 @@ public class DetailView extends JPanel {
         pp_year = new JLabel("");
         panel.add(pp_year, "");
 
-        pp_flag = new JLabel("Country Flags");
+        pp_flag = new JPanel();
+        pp_flag.setLayout(new MigLayout());
+        pp_flag.setBackground(Color.white);
         panel.add(pp_flag, "wrap,right");
 
         pp_title = new JLabel("");
@@ -249,10 +251,10 @@ public class DetailView extends JPanel {
         sp_OscarsText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-
-                //Todo: Abfrage auf Integer prüfen: if false oder <1 = 1
-
                 String text = sp_OscarsText.getText();
+                if (!(isNumeric(text)&&(Integer.parseInt(text)>0))){
+                    text="1";
+                }
                 controller.setNumberOfOscarsAtSelectedMovie(
                         (text.equals("")) ? 0 : Integer.parseInt(text)
                 );
@@ -260,8 +262,24 @@ public class DetailView extends JPanel {
             }
         });
 
+        sp_CountryText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = sp_CountryText.getText();
+                if (text.length()==0){
+                    text="us";
+                }
+                model.getList().get(model.getIndexById(model.getSelectedMovieId())).setCountry(text);
+
+                showData();
+            }
+
+
+        });
+
 
     }
+
 
     public void addObservers() {
         model.addObserver(m -> {
@@ -283,6 +301,14 @@ public class DetailView extends JPanel {
         pp_title.setText(movie.getTitle());
         pp_director.setText(movie.getDirector());
         pp_actors.setText(movie.getMainActor());
+
+        String targetPoster = "../resources/poster/"+model.getSelectedMovieId()+".jpg";
+        ImageIcon poster =  new ImageIcon(getClass().getResource(targetPoster));
+        pp_poster.setIcon(poster);
+
+        //FLAG
+
+
         sp_YearText.setText(movie.getYearOfAward());
         sp_TitleText.setText(movie.getTitle());
         sp_directorText.setText(movie.getDirector());
@@ -296,6 +322,7 @@ public class DetailView extends JPanel {
         sp_ReleaseDateText.setText(movie.getYearOfProduction());
         sp_OscarsText.setText(movie.getNumberOfOscars().toString());
 
+        generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
         pp_oscars.updateUI();
 
@@ -311,6 +338,45 @@ public class DetailView extends JPanel {
             pp_oscars.add(oscarLabel);
         }
 
+    }
+
+    //FLAG
+    public void generateFlagIconsSet(Movie movie){
+        pp_flag.removeAll();
+        StringBuilder tempString = new StringBuilder(model.getList().get(model.getIndexById(model.getSelectedMovieId())).getCountry().toLowerCase());
+        while (tempString.length() != 0){
+            String targetFlag = setFlag(tempString.toString());
+            ImageIcon flag = new ImageIcon(getClass().getResource(targetFlag));
+            JLabel flagLabel = new JLabel();
+            flagLabel.setIcon(flag);
+            pp_flag.add(flagLabel);
+            tempString.delete(0,3);
+        }
+    }
+
+    public static boolean isNumeric(String value) {
+        try {
+            int number = Integer.parseInt(value);
+            return true;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+    //FLAG
+    public String setFlag(String allFlags){
+        StringBuilder stringFlag = new StringBuilder(allFlags);
+        String help,targetFlag;
+        for (int i=0;i<stringFlag.length();++i){
+            if (stringFlag.charAt(i)==' ' || stringFlag.charAt(i)==','||stringFlag.charAt(i)==';'){
+                    help = stringFlag.substring(i-2, i);
+                    targetFlag = "../resources/flags_iso/24/"+help+".png";
+                    return targetFlag;
+            }
+        }
+        help = (stringFlag.substring(stringFlag.length()-2,stringFlag.length()));
+        targetFlag = "../resources/flags_iso/24/"+help+".png";
+        return targetFlag;
     }
 
 
