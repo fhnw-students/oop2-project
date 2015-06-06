@@ -56,8 +56,4 @@ public class AcademyController {
 		model.setUndoAvailable(!undoStack.isEmpty());
 	}
 
-	public void updateView(){
-		view.createAndShow();
-	}
-
 }

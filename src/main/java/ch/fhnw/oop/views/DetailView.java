@@ -4,6 +4,7 @@ import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 import ch.fhnw.oop.Movie;
 import net.miginfocom.swing.MigLayout;
+import sun.jvm.hotspot.types.JIntField;
 
 
 import javax.swing.*;
@@ -60,6 +61,8 @@ public class DetailView extends JPanel {
 
 
 
+
+
     /**
      * CONSTRUCTOR
      */
@@ -110,8 +113,10 @@ public class DetailView extends JPanel {
         panel.add(pp_poster, "dock east");
 
 
-        pp_oscars = new JLabel("Hier zeigt es die Anzahl Oscars an");
+
+        pp_oscars = new JLabel("Anzahl Oscars");
         panel.add(pp_oscars, "dock south");
+
 
         pp_year = new JLabel("");
         panel.add(pp_year,"");
@@ -249,7 +254,7 @@ public class DetailView extends JPanel {
         sp_DurationText.setText(movie.getDuration().toString());
         sp_FskText.setText(movie.getFsk());
         sp_ReleaseDateText.setText(movie.getYearOfProduction());
-        sp_OscarsText.setText(movie.getNumberOfOscars());
+        sp_OscarsText.setText(movie.getNumberOfOscars().toString());
 
 
     }

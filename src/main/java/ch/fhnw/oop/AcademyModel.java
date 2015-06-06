@@ -54,12 +54,16 @@ public class AcademyModel implements Observable {
         switch (col) {
             case 0:
                 movie.setHasModified((value == "X"));
+                break;
             case 1:
                 movie.setYearOfAward(value);
+                break;
             case 2:
                 movie.setTitle(value);
+                break;
             case 3:
                 movie.setDirector(value);
+                break;
             default:
                 movie.setMainActor(value);
         }

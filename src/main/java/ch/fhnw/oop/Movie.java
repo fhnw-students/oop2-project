@@ -22,7 +22,7 @@ public class Movie {
     private String fsk;
     private String genre;
     private String startDate;
-    private String numberOfOscars ="0";
+    private Integer numberOfOscars =1;
 
     /**
      * Constructors
@@ -165,11 +165,11 @@ public class Movie {
         hasModified = true;
     }
 
-    public String getNumberOfOscars(){
+    public Integer getNumberOfOscars(){
         return this.numberOfOscars;
     }
 
-    public void setNumberOfOscars(String numberOfOscars){
+    public void setNumberOfOscars(Integer numberOfOscars){
         this.numberOfOscars = numberOfOscars;
     }
 

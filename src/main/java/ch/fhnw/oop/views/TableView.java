@@ -41,7 +41,7 @@ public class TableView extends JTable {
             if (this.getSelectedRow() > -1) {
                 Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
                 this.model.setSelectedMovieId(selectedMovie.getId());
-                controller.updateView();
+                controller.initializeView();
 
             }
         });
@@ -63,7 +63,7 @@ public class TableView extends JTable {
                 "",
                 "Jahr",
                 "Titel",
-                "Reggiseur",
+                "Regisseur",
                 "Hauptdarsteller"
         };
         private final AcademyModel model;
