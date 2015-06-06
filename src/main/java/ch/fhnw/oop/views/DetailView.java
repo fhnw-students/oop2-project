@@ -218,6 +218,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_TitleText.getText(), TableView.TableModel.COL_TITLE);
+                pp_title.setText(model.getModel(model.getSelectedMovieId()).getTitle());
             }
         });
 
@@ -225,6 +226,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_YearText.getText(), TableView.TableModel.COL_YEAR);
+                pp_year.setText(model.getModel(model.getSelectedMovieId()).getYearOfAward());
             }
         });
 
@@ -232,6 +234,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_directorText.getText(), TableView.TableModel.COL_DIRECTOR);
+                pp_director.setText(model.getModel(model.getSelectedMovieId()).getDirector());
             }
         });
 
@@ -239,6 +242,14 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_ActorText.getText(), TableView.TableModel.COL_MAIN_ACTOR);
+                pp_actors.setText(model.getModel(model.getSelectedMovieId()).getMainActor());
+            }
+        });
+
+        sp_ActorText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
 
@@ -248,8 +259,6 @@ public class DetailView extends JPanel {
     public void addObservers(){
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
-
-
 
 
         });
@@ -291,31 +300,5 @@ public class DetailView extends JPanel {
         }
     }
 
-
-    //    private void initializeComponents() {
-//
-//        ds_year = new JLabel();
-//        ds_year.setFont(new Font("Arial", 1, 24));
-//        ds_year.setText("bla");
-//        ds_year.setHorizontalAlignment(CENTER);
-//
-//
-//    }
-
-//    private JPanel layoutComponents() {
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BorderLayout());
-//        panel.setBackground(Color.black);
-//
-//
-////        JPanel detail_show = new JPanel(new MigLayout());
-////        detail_show.add(ds_year);
-////        JPanel detail_editor = new JPanel(new MigLayout());
-////        panel.add(detail_show, BorderLayout.NORTH);
-////        panel.add(detail_editor, BorderLayout.SOUTH);
-//
-//
-//        return panel;
-//    }
 
 }
