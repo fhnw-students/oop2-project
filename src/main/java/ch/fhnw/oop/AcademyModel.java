@@ -152,10 +152,56 @@ public class AcademyModel implements Observable {
 
     public void setSelectedMovieId(int selectedMovieId) {
         this.selectedMovieId = selectedMovieId;
+        notifyObservers();
     }
 
     public Movie getModel(int row) {
         Movie movie = list.get(row);
         return movie;
     }
+
+    public void add(Movie movie) {
+        movie.setId(list.size());
+        list.add(movie);
+        setSelectedMovieId(list.size()-1);
+    }
+
+    public void removeByIndex(int index){
+        list.remove(index);
+    }
+
+    public void removeById(int id){
+        int index = getIndexById(id);
+        list.remove(index);
+    }
+
+    public void removeByMovie(Movie movie){
+        int index = getIndexByMovie(movie);
+        list.remove(index);
+    }
+
+    public int getIndexById(int id){
+        int counter = 0;
+        for (Movie m: list) {
+            if(m.getId() == id){
+                return counter;
+            }
+            ++counter;
+        }
+        return 0;
+    }
+
+    public int getIndexByMovie(Movie movie){
+        return getIndexById(movie.getId());
+    }
+
+    public Movie getMovieById(int id){
+        int index = getIndexById(id);
+        return list.get(index);
+    }
+
+    public Movie getMovieByIndex(int index){
+        return list.get(index);
+    }
+
 }
