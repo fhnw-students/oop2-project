@@ -22,7 +22,7 @@ public class Movie {
     private String fsk;
     private String genre;
     private String startDate;
-    private Integer numberOfOscars =1;
+    private Integer numberOfOscars =5;
 
     /**
      * Constructors

@@ -30,7 +30,7 @@ public class DetailView extends JPanel {
     private JLabel pp_director;
     private JLabel pp_actors;
     private JLabel pp_flag;
-    private JLabel pp_oscars;
+    private JPanel pp_oscars;
     private JLabel pp_poster;
 
     // Attributes of show_panel
@@ -104,7 +104,7 @@ public class DetailView extends JPanel {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout(
                 "",
-                "[][grow][grow]",
+                "[grow][grow][grow]",
                 "[grow][grow][grow][grow][grow]"
         ));
         panel.setBackground(Color.white);
@@ -113,9 +113,9 @@ public class DetailView extends JPanel {
         panel.add(pp_poster, "dock east");
 
 
-
-        pp_oscars = new JLabel("Anzahl Oscars");
+        pp_oscars = new JPanel();
         panel.add(pp_oscars, "dock south");
+
 
 
         pp_year = new JLabel("");
@@ -243,6 +243,16 @@ public class DetailView extends JPanel {
         pp_director.setText(movie.getDirector());
         pp_actors.setText(movie.getMainActor());
 
+        pp_oscars.setLayout(new MigLayout());
+        pp_oscars.setBackground(Color.white);
+        for(int i=0; i<movie.getNumberOfOscars();++i) {
+            JLabel oscarLabel = new JLabel();
+            pp_oscars.add(oscarLabel);
+            ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
+            oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
+            oscarLabel.setIcon(oscar);
+        }
+
         sp_YearText.setText(movie.getYearOfAward());
         sp_TitleText.setText(movie.getTitle());
         sp_directorText.setText(movie.getDirector());
@@ -255,6 +265,7 @@ public class DetailView extends JPanel {
         sp_FskText.setText(movie.getFsk());
         sp_ReleaseDateText.setText(movie.getYearOfProduction());
         sp_OscarsText.setText(movie.getNumberOfOscars().toString());
+
 
 
     }
