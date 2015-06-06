@@ -25,6 +25,13 @@ public class AcademyModel implements Observable {
         selectedMovieId = list.get(0).getId();
     }
 
+    public void setActorsAtSelectedMovie(String actor){
+        Movie movie = list.get(selectedMovieId);
+        movie.setMainActor(actor);
+        list.set(selectedMovieId, movie);
+        notifyObservers();
+    }
+
     public List<Movie> getList(){
         return list;
     }
@@ -67,9 +74,9 @@ public class AcademyModel implements Observable {
             default:
                 movie.setMainActor(value);
         }
+        list.set(index, movie);
+        notifyObservers();
     }
-
-
 
     private static List<Movie> readCSVFile(URI csvFileName) throws IOException {
 
@@ -110,22 +117,9 @@ public class AcademyModel implements Observable {
         observers.remove(observer);
     }
 
-
     private void notifyObservers() {
         observers.forEach(observer -> observer.update(this));
     }
-
-//    public int getCounter() {
-//        return counter;
-//    }
-//
-//    public void setCounter(int counter) {
-//        this.counter = counter;
-//    }
-//
-//    public void setInputValid(boolean inputValid) {
-//        this.isInputValid = inputValid;
-//    }
 
     public boolean isUndoAvailable() {
         return isUndoAvailable;

@@ -33,6 +33,14 @@ public class AcademyController {
 		cmd.undo();
 	}
 
+	public void setValueAtSelectedRow(String value, int col) {
+		model.setValueAt(value, model.getSelectedMovieId(), col);
+	}
+
+	public void setValueAt(String value, int index, int col) {
+		model.setValueAt(value, index, col);
+	}
+
 	public void redo() {
 		if (redoStack.isEmpty()) {
 			return;
