@@ -169,8 +169,9 @@ public class Movie {
         return this.numberOfOscars;
     }
 
-    public void setNumberOfOscars(Integer numberOfOscars){
+    public void setNumberOfOscars(int numberOfOscars){
         this.numberOfOscars = numberOfOscars;
+        this.hasModified = true;
     }
 
 

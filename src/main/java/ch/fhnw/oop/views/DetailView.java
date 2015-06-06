@@ -88,7 +88,7 @@ public class DetailView extends JPanel {
         this.add(form, BorderLayout.CENTER);
 
         this.setVisible(true);
-        showData(model.getList(), model.getSelectedMovieId());
+        showData();
     }
 
     /**
@@ -246,9 +246,16 @@ public class DetailView extends JPanel {
             }
         });
 
-        sp_ActorText.addKeyListener(new KeyAdapter() {
+        sp_OscarsText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
+
+                //Todo: Abfrage auf Integer prüfen: if false oder <1 = 1
+
+                String text = sp_OscarsText.getText();
+                controller.setNumberOfOscarsAtSelectedMovie(
+                        (text.equals("")) ? 0 : Integer.parseInt(text)
+                );
 
             }
         });
@@ -256,17 +263,21 @@ public class DetailView extends JPanel {
 
     }
 
-    public void addObservers(){
+    public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
+
+            //initializePreviewPanel();
+            showData();
+            //generateOscarIconsSet(model.getModel(model.getSelectedMovieId()));
 
 
         });
     }
 
 
-    public void showData(List<Movie> list, int index) {
-        Movie movie = list.get(index);
+    public void showData() {
+        Movie movie = model.getMovieById(model.getSelectedMovieId());
 
         pp_year.setText(movie.getYearOfAward());
         pp_title.setText(movie.getTitle());
@@ -286,18 +297,20 @@ public class DetailView extends JPanel {
         sp_OscarsText.setText(movie.getNumberOfOscars().toString());
 
         generateOscarIconsSet(movie);
+        pp_oscars.updateUI();
 
     }
 
-    public void generateOscarIconsSet(Movie movie){
+    public void generateOscarIconsSet(Movie movie) {
         pp_oscars.removeAll();
-        for(int i=0; i<movie.getNumberOfOscars();++i) {
+        for (int i = 0; i < movie.getNumberOfOscars(); ++i) {
             JLabel oscarLabel = new JLabel();
             ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
             oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
             oscarLabel.setIcon(oscar);
             pp_oscars.add(oscarLabel);
         }
+
     }
 
 
