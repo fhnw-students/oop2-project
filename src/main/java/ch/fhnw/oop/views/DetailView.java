@@ -108,6 +108,8 @@ public class DetailView extends JPanel {
         panel.add(pp_poster, "dock east");
 
         pp_oscars = new JPanel();
+        pp_oscars.setLayout(new MigLayout());
+        pp_oscars.setBackground(Color.white);
         panel.add(pp_oscars, "dock south");
 
         pp_year = new JLabel("");
@@ -261,17 +263,6 @@ public class DetailView extends JPanel {
         pp_title.setText(movie.getTitle());
         pp_director.setText(movie.getDirector());
         pp_actors.setText(movie.getMainActor());
-
-        pp_oscars.setLayout(new MigLayout());
-        pp_oscars.setBackground(Color.white);
-        for(int i=0; i<movie.getNumberOfOscars();++i) {
-            JLabel oscarLabel = new JLabel();
-            pp_oscars.add(oscarLabel);
-            ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
-            oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
-            oscarLabel.setIcon(oscar);
-        }
-
         sp_YearText.setText(movie.getYearOfAward());
         sp_TitleText.setText(movie.getTitle());
         sp_directorText.setText(movie.getDirector());
@@ -285,9 +276,22 @@ public class DetailView extends JPanel {
         sp_ReleaseDateText.setText(movie.getYearOfProduction());
         sp_OscarsText.setText(movie.getNumberOfOscars().toString());
 
-
+        generateOscarIconsSet(movie);
 
     }
+
+    public void generateOscarIconsSet(Movie movie){
+        pp_oscars.removeAll();
+        for(int i=0; i<movie.getNumberOfOscars();++i) {
+            JLabel oscarLabel = new JLabel();
+            ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
+            oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
+            oscarLabel.setIcon(oscar);
+            pp_oscars.add(oscarLabel);
+        }
+    }
+
+
     //    private void initializeComponents() {
 //
 //        ds_year = new JLabel();
