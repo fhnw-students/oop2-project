@@ -64,7 +64,20 @@ public class AcademyController {
 		model.setUndoAvailable(!undoStack.isEmpty());
 	}
 
+
 	public void setNumberOfOscarsAtSelectedMovie(int amount) {
 		model.setNumberOfOscarsAtSelectedMovie(amount);
 	}
+
+	public void addNewMovie(){
+		Movie movie = new Movie();
+		model.add(movie);
+	}
+
+	public void removeMovie(){
+
+//		model.remove(index);
+	}
+
+
 }

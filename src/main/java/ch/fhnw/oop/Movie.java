@@ -31,7 +31,7 @@ public class Movie {
      * Constructors
      */
     public Movie() {
-        hasModified = true;
+        this.hasModified = true;
     }
 
     public Movie(String csvLine) {
@@ -48,8 +48,9 @@ public class Movie {
         this.fsk = splitted[9];
         this.genre = splitted[10];
         this.startDate = splitted[11];
+
     }
-    
+
     /**
      * API
      */
@@ -168,12 +169,12 @@ public class Movie {
         hasModified = true;
     }
 
-    public Integer getNumberOfOscars(){
+    public Integer getNumberOfOscars() {
         return this.numberOfOscars;
     }
 
-    public void setNumberOfOscars(int numberOfOscars){
-        this.numberOfOscars = numberOfOscars;
+    public void setNumberOfOscars(Integer numberOfOscars) {
+        this.numberOfOscars = numberOfOscars < 1 ?1:numberOfOscars;
         this.hasModified = true;
     }
 

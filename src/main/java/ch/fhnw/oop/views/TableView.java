@@ -18,7 +18,6 @@ import java.net.URL;
 public class TableView extends JTable {
 
 
-
     private final AcademyModel model;
     private final AcademyController controller;
     private TableModel tableModel;
@@ -34,27 +33,22 @@ public class TableView extends JTable {
         addObservers();
     }
 
-    private void addEvents() {
 
+    private void addEvents() {
         this.getSelectionModel().addListSelectionListener(event -> {
             if (this.getSelectedRow() > -1) {
                 Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
                 this.model.setSelectedMovieId(selectedMovie.getId());
-                controller.initializeView();
+                tableModel.fireTableRowsUpdated(0, model.getList().size() - 1);
             }
         });
-
 
     }
 
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
-
-            for (int i = 0; i < 5; i++) {
-                tableModel.fireTableCellUpdated(academyModel.getSelectedMovieId(), i);
-            }
-
+            tableModel.fireTableRowsUpdated(0, model.getList().size() - 1);
         });
     }
 

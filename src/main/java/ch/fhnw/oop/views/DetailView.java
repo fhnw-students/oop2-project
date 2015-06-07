@@ -280,7 +280,6 @@ public class DetailView extends JPanel {
 
     }
 
-
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
@@ -292,7 +291,6 @@ public class DetailView extends JPanel {
 
         });
     }
-
 
     public void showData() {
         Movie movie = model.getMovieById(model.getSelectedMovieId());
@@ -378,6 +376,5 @@ public class DetailView extends JPanel {
         targetFlag = "../resources/flags_iso/24/"+help+".png";
         return targetFlag;
     }
-
 
 }
