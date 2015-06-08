@@ -45,10 +45,29 @@ public class TableView extends JTable {
 
     }
 
+    public void refreshSelectedMovie(int index){
+        tableModel.fireTableRowsUpdated(index, index);
+    }
+
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
-            tableModel.fireTableRowsUpdated(0, model.getList().size() - 1);
+
+            switch (academyModel.observerAction){
+                case AcademyModel.ACTION_INSERT:
+                    tableModel.fireTableRowsInserted(academyModel.observerIndex, academyModel.observerIndex);
+                    break;
+
+                case AcademyModel.ACTION_DELETE:
+                    tableModel.fireTableRowsDeleted(academyModel.observerIndex, academyModel.observerIndex);
+                    break;
+
+            }
+
+            refreshSelectedMovie(academyModel.getIndexById(academyModel.getSelectedMovieId()));
+            academyModel.observerAction = AcademyModel.ACTION_NONE;
+            academyModel.observerIndex = academyModel.getIndexById(academyModel.getSelectedMovieId());
+
         });
     }
 
@@ -89,10 +108,6 @@ public class TableView extends JTable {
 
         public String getColumnName(int col) {
             return columnNames[col];
-        }
-
-        public Movie getModel(int row) {
-            return model.getModel(row);
         }
 
         public Object getValueAt(int row, int col) {

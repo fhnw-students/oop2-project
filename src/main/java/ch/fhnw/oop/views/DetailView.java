@@ -234,7 +234,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_TitleText.getText(), TableView.TableModel.COL_TITLE);
-                pp_title.setText(model.getModel(model.getSelectedMovieId()).getTitle());
+                pp_title.setText(model.getMovieById(model.getSelectedMovieId()).getTitle());
             }
         });
 
@@ -242,7 +242,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_YearText.getText(), TableView.TableModel.COL_YEAR);
-                pp_year.setText(model.getModel(model.getSelectedMovieId()).getYearOfAward());
+                pp_year.setText(model.getMovieById(model.getSelectedMovieId()).getYearOfAward());
             }
         });
 
@@ -250,7 +250,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_directorText.getText(), TableView.TableModel.COL_DIRECTOR);
-                pp_director.setText(model.getModel(model.getSelectedMovieId()).getDirector());
+                pp_director.setText(model.getMovieById(model.getSelectedMovieId()).getDirector());
             }
         });
 
@@ -258,7 +258,7 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_ActorText.getText(), TableView.TableModel.COL_MAIN_ACTOR);
-                pp_actors.setText(model.getModel(model.getSelectedMovieId()).getMainActor());
+                pp_actors.setText(model.getMovieById(model.getSelectedMovieId()).getMainActor());
             }
         });
 
@@ -351,7 +351,6 @@ public class DetailView extends JPanel {
 
         generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
-
 
     }
 

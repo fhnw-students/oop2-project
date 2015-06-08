@@ -1,6 +1,10 @@
 package ch.fhnw.oop;
 
+import com.sun.deploy.util.StringUtils;
+
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie {
 
@@ -12,7 +16,7 @@ public class Movie {
     private boolean hasModified = false;
 
     //#id;Title;yearOfAward;director;mainActor;titleEnglish;yearOfProduction;country;duration;fsk;genre;startDate
-    private int id;
+    private Integer id;
     private String title;
     private String yearOfAward;
     private String director;
@@ -20,11 +24,11 @@ public class Movie {
     private String titleEnglish;
     private String yearOfProduction;
     private String country;
-    private int duration;
-    private int fsk;
+    private Integer duration;
+    private Integer fsk;
     private String genre;
     private String startDate;
-    private int numberOfOscars =1;
+    private Integer numberOfOscars = 1;
     private ImageIcon poster;
 
     /**
@@ -32,8 +36,19 @@ public class Movie {
      */
     public Movie() {
         this.hasModified = true;
-        this.duration = 0;
+        this.fsk = 0;
+        this.duration = 1;
         this.numberOfOscars = 1;
+        this.startDate = "-";
+    }
+
+    public Movie(Integer id) {
+        this.id = id;
+        this.hasModified = true;
+        this.fsk = 0;
+        this.duration = 1;
+        this.numberOfOscars = 1;
+        this.startDate = "-";
     }
 
     public Movie(String csvLine) {
@@ -50,30 +65,11 @@ public class Movie {
         this.fsk = Integer.parseInt(splitted[9]);
         this.genre = splitted[10];
         this.startDate = splitted[11];
-
     }
 
     /**
      * API
      */
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        hasModified = true;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-        hasModified = true;
-    }
-
     public boolean isHasModified() {
         return hasModified;
     }
@@ -82,13 +78,32 @@ public class Movie {
         this.hasModified = hasModified;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.setHasModified((this.validateChange(title, this.title)) || this.hasModified);
+        this.title = title;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.setHasModified((this.validateChange(id, this.id)) || this.hasModified);
+        this.id = id;
+    }
+
     public String getYearOfAward() {
         return yearOfAward;
     }
 
     public void setYearOfAward(String yearOfAward) {
+        this.setHasModified((this.validateChange(yearOfAward, this.yearOfAward)) || this.hasModified);
         this.yearOfAward = yearOfAward;
-        hasModified = true;
+
     }
 
     public String getDirector() {
@@ -96,8 +111,8 @@ public class Movie {
     }
 
     public void setDirector(String director) {
+        this.setHasModified((this.validateChange(director, this.director)) || this.hasModified);
         this.director = director;
-        hasModified = true;
     }
 
     public String getMainActor() {
@@ -105,8 +120,8 @@ public class Movie {
     }
 
     public void setMainActor(String mainActor) {
+        this.setHasModified((this.validateChange(mainActor, this.mainActor)) || this.hasModified);
         this.mainActor = mainActor;
-        hasModified = true;
     }
 
     public String getTitleEnglish() {
@@ -114,8 +129,8 @@ public class Movie {
     }
 
     public void setTitleEnglish(String titleEnglish) {
+        this.setHasModified((this.validateChange(titleEnglish, this.titleEnglish)) || this.hasModified);
         this.titleEnglish = titleEnglish;
-        hasModified = true;
     }
 
     public String getYearOfProduction() {
@@ -123,8 +138,8 @@ public class Movie {
     }
 
     public void setYearOfProduction(String yearOfProduction) {
+        this.setHasModified((this.validateChange(yearOfProduction, this.yearOfProduction)) || this.hasModified);
         this.yearOfProduction = yearOfProduction;
-        hasModified = true;
     }
 
     public String getCountry() {
@@ -132,8 +147,8 @@ public class Movie {
     }
 
     public void setCountry(String country) {
+        this.setHasModified((this.validateChange(country, this.country)) || this.hasModified);
         this.country = country;
-        hasModified = true;
     }
 
     public Integer getDuration() {
@@ -141,17 +156,17 @@ public class Movie {
     }
 
     public void setDuration(Integer duration) {
+        this.setHasModified((this.validateChange(duration, this.duration)) || this.hasModified);
         this.duration = duration;
-        hasModified = true;
     }
 
-    public int getFsk() {
+    public Integer getFsk() {
         return fsk;
     }
 
-    public void setFsk(int fsk) {
+    public void setFsk(Integer fsk) {
+        this.setHasModified((this.validateChange(fsk, this.fsk)) || this.hasModified);
         this.fsk = fsk;
-        hasModified = true;
     }
 
     public String getGenre() {
@@ -159,6 +174,7 @@ public class Movie {
     }
 
     public void setGenre(String genre) {
+        this.setHasModified((this.validateChange(genre, this.genre)) || this.hasModified);
         this.genre = genre;
     }
 
@@ -167,8 +183,8 @@ public class Movie {
     }
 
     public void setStartDate(String startDate) {
+        this.setHasModified((this.validateChange(startDate, this.startDate)) || this.hasModified);
         this.startDate = startDate;
-        hasModified = true;
     }
 
     public Integer getNumberOfOscars() {
@@ -176,17 +192,39 @@ public class Movie {
     }
 
     public void setNumberOfOscars(Integer numberOfOscars) {
-        this.numberOfOscars = numberOfOscars < 1 ?1:numberOfOscars;
-        this.hasModified = true;
+        this.setHasModified((this.validateChange(numberOfOscars, this.numberOfOscars)) || this.hasModified);
+        this.numberOfOscars = numberOfOscars < 1 ? 1 : numberOfOscars;
     }
 
-    public void setPoster(ImageIcon poster){
+    public void setPoster(ImageIcon poster) {
         this.poster = poster;
     }
 
-    public ImageIcon getPoster(){
+    public ImageIcon getPoster() {
         return this.poster;
     }
 
+    private boolean validateChange(Object newValue, Object oldValue) {
+        return !newValue.equals(oldValue);
+    }
+
+    @Override
+    public String toString() {
+        List<String> rows = new ArrayList<>();
+        rows.add(this.id.toString());
+        rows.add(this.title);
+        rows.add(this.yearOfAward);
+        rows.add(this.director);
+        rows.add(this.mainActor);
+        rows.add(this.titleEnglish);
+        rows.add(this.yearOfProduction);
+        rows.add(this.country);
+        rows.add(this.duration.toString());
+        rows.add(this.fsk.toString());
+        rows.add(this.genre);
+        rows.add(this.startDate);
+        rows.add(this.numberOfOscars.toString());
+        return StringUtils.join(rows, DELIMITER_NEXT_DATA);
+    }
 
 }

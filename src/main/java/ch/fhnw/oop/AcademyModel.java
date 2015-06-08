@@ -8,12 +8,21 @@ import java.util.*;
 public class AcademyModel implements Observable {
 
     private static final String FILE_PATH = "./resources/data/movies.csv";
+    private static final String STRING_BOL_TRUE = "X";
+    private static final String STRING_BOL_FALSE = "";
+    public static final String ACTION_INSERT = "insert";
+    public static final String ACTION_UPDATE = "update";
+    public static final String ACTION_DELETE = "delete";
+    public static final String ACTION_NONE = "";
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
     private boolean isRedoAvailable = false;
 
     private int selectedMovieId;
+    public int observerIndex;
+
+    public String observerAction = "";
 
     private List<Movie> list = new ArrayList<>();
 
@@ -22,14 +31,14 @@ public class AcademyModel implements Observable {
         selectedMovieId = list.get(0).getId();
     }
 
-    public void setActorsAtSelectedMovie(String actor){
-        Movie movie = list.get(selectedMovieId);
-        movie.setMainActor(actor);
-        list.set(selectedMovieId, movie);
-        notifyObservers();
-    }
+//    public void setActorsAtSelectedMovie(String actor) {
+//        Movie movie = list.get(selectedMovieId);
+//        movie.setMainActor(actor);
+//        list.set(selectedMovieId, movie);
+//        notifyObservers();
+//    }
 
-    public List<Movie> getList(){
+    public List<Movie> getList() {
         return list;
     }
 
@@ -41,7 +50,7 @@ public class AcademyModel implements Observable {
         Movie movie = list.get(index);
         switch (col) {
             case 0:
-                return movie.isHasModified() ? "X":"";
+                return movie.isHasModified() ? STRING_BOL_TRUE : STRING_BOL_FALSE;
             case 1:
                 return movie.getYearOfAward();
             case 2:
@@ -57,7 +66,7 @@ public class AcademyModel implements Observable {
         Movie movie = list.get(index);
         switch (col) {
             case 0:
-                movie.setHasModified((value == "X"));
+                movie.setHasModified((value.equals(STRING_BOL_TRUE)));
                 break;
             case 1:
                 movie.setYearOfAward(value);
@@ -114,7 +123,12 @@ public class AcademyModel implements Observable {
         observers.remove(observer);
     }
 
-    private void notifyObservers() {
+    public void notifyObservers() {
+        observers.forEach(observer -> observer.update(this));
+    }
+
+    public void notifyObservers(String action) {
+        observerAction = action;
         observers.forEach(observer -> observer.update(this));
     }
 
@@ -142,7 +156,6 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
-
     public int getSelectedMovieId() {
         return selectedMovieId;
     }
@@ -152,37 +165,34 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
-    public Movie getModel(int row) {
-        Movie movie = list.get(row);
-        return movie;
-    }
-
     public void add(Movie movie) {
-        final Comparator<Movie> comp = (p1, p2) -> Integer.compare( p1.getId(), p2.getId());
+        final Comparator<Movie> comp = (p1, p2) -> Integer.compare(p1.getId(), p2.getId());
         int maxId = list.stream().max(comp).get().getId();
         movie.setId(maxId + 1);
         list.add(movie);
-        setSelectedMovieId(movie.getId());
+        selectedMovieId = movie.getId();
+        observerIndex = getIndexByMovie(movie);
+        observerAction = ACTION_INSERT;
+        notifyObservers();
     }
 
-    public void removeByIndex(int index){
-        list.remove(index);
+    public void removeById(int id) {
+        Integer index = getIndexById(id);
+        if (index.equals(list.size() - 1)) {
+            selectedMovieId = getMovieByIndex(index - 1).getId();
+        }else{
+            selectedMovieId = getMovieByIndex(index + 1).getId();
+        }
+        list.remove((int) index);
+        observerIndex = index;
+        observerAction = ACTION_DELETE;
+        notifyObservers();
     }
 
-    public void removeById(int id){
-        int index = getIndexById(id);
-        list.remove(index);
-    }
-
-    public void removeByMovie(Movie movie){
-        int index = getIndexByMovie(movie);
-        list.remove(index);
-    }
-
-    public int getIndexById(int id){
+    public int getIndexById(int id) {
         int counter = 0;
-        for (Movie m: list) {
-            if(m.getId() == id){
+        for (Movie m : list) {
+            if (m.getId() == id) {
                 return counter;
             }
             ++counter;
@@ -190,25 +200,78 @@ public class AcademyModel implements Observable {
         return 0;
     }
 
-    public int getIndexByMovie(Movie movie){
+    public int getIndexByMovie(Movie movie) {
         return getIndexById(movie.getId());
     }
 
-    public Movie getMovieById(int id){
+    public Movie getMovieById(int id) {
         int index = getIndexById(id);
         return list.get(index);
     }
 
-    public Movie getMovieByIndex(int index){
+    public Movie getMovieByIndex(int index) {
         return list.get(index);
     }
 
-    public void setNumberOfOscarsAtSelectedMovie(int amount) {
-        Movie movie = getMovieById(getSelectedMovieId());
-        movie.setNumberOfOscars(amount);
-        notifyObservers();
+    public void setSelectedMovieCountry(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setCountry(value);
+        this.notifyObservers();
     }
 
+    public void setSelectedMovieFsk(int value) {
+        this.getMovieById(this.getSelectedMovieId()).setFsk(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieMainActor(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setMainActor(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieDirector(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setDirector(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieDuration(int value) {
+        this.getMovieById(this.getSelectedMovieId()).setDuration(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieGenre(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setGenre(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieNumberOfOscars(int value) {
+        this.getMovieById(this.getSelectedMovieId()).setNumberOfOscars(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieStartDate(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setStartDate(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieTitle(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setTitle(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieTitleEnglish(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setTitleEnglish(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieYearOfAward(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setYearOfAward(value);
+        this.notifyObservers();
+    }
+
+    public void setSelectedMovieYearOfProduction(String value) {
+        this.getMovieById(this.getSelectedMovieId()).setYearOfProduction(value);
+        this.notifyObservers();
+    }
 
 
 }
