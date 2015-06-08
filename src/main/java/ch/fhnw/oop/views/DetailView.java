@@ -8,8 +8,14 @@ import sun.jvm.hotspot.types.JIntField;
 
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 
@@ -17,6 +23,11 @@ import static javax.swing.SwingConstants.CENTER;
 
 
 public class DetailView extends JPanel {
+
+    public static String PATH_POSTERS = "../resources/poster/";
+    public static String IMAGE_NO_POSTERS = "../resources/poster/no_poster.gif";
+    public static String PATH_FLAGS = "../resources/flags_iso/24/";
+
     private final AcademyModel model;
     private final AcademyController controller;
 
@@ -49,14 +60,18 @@ public class DetailView extends JPanel {
     private JTextField sp_ProductionYearText;
     private JLabel sp_Country;
     private JTextField sp_CountryText;
-    private JLabel sp_Duration;
-    private JTextField sp_DurationText;
-    private JLabel sp_Fsk;
-    private JTextField sp_FskText;
     private JLabel sp_ReleaseDate;
     private JTextField sp_ReleaseDateText;
+
+    private JLabel sp_Fsk;
+    private SpinnerModel sp_FskModel;
+    private JSpinner sp_FskText;
+    private JLabel sp_Duration;
+    private SpinnerModel sp_DurationModel;
+    private JSpinner sp_DurationText;
     private JLabel sp_Oscars;
-    private JTextField sp_OscarsText;
+    private SpinnerModel sp_OscarsModel;
+    private JSpinner sp_OscarsText;
 
 
     /**
@@ -190,12 +205,14 @@ public class DetailView extends JPanel {
 
         sp_Duration = new JLabel("Spieldauer:");
         panel.add(sp_Duration, "width :100:,gapleft 100");
-        sp_DurationText = new JTextField();
+        sp_DurationModel = new SpinnerNumberModel(1, 1, 1000, 1);
+        sp_DurationText = new JSpinner(sp_DurationModel);
         panel.add(sp_DurationText, "width :100:,wrap,right");
 
         sp_Fsk = new JLabel("FSK:");
         panel.add(sp_Fsk, "width :100:");
-        sp_FskText = new JTextField();
+        sp_FskModel = new SpinnerNumberModel(0, 0, 21, 1);
+        sp_FskText = new JSpinner(sp_FskModel);
         panel.add(sp_FskText, "width :100:");
 
         sp_ReleaseDate = new JLabel("Releasedatum:");
@@ -205,7 +222,8 @@ public class DetailView extends JPanel {
 
         sp_Oscars = new JLabel("Oscars:");
         panel.add(sp_Oscars, "width :100:");
-        sp_OscarsText = new JTextField();
+        sp_OscarsModel = new SpinnerNumberModel(1, 1, 30, 1);
+        sp_OscarsText = new JSpinner(sp_OscarsModel);
         panel.add(sp_OscarsText, "width :100:");
 
         return panel;
@@ -248,33 +266,20 @@ public class DetailView extends JPanel {
             }
         });
 
-        sp_OscarsText.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String text = sp_OscarsText.getText();
-                if (!(isNumeric(text)&&(Integer.parseInt(text)>0))){
-                    text="1";
-                }
-                controller.setNumberOfOscarsAtSelectedMovie(
-                        (text.equals("")) ? 0 : Integer.parseInt(text)
-                );
 
+        sp_OscarsModel.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                controller.setNumberOfOscarsAtSelectedMovie((int)sp_OscarsModel.getValue());
             }
         });
+
 
         sp_CountryText.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                String text = sp_CountryText.getText();
-                if (text.length()==0){
-                    text="us";
-                }
-                model.getList().get(model.getIndexById(model.getSelectedMovieId())).setCountry(text);
-
-                showData();
+                controller.onChangeCountry(sp_CountryText.getText());
             }
-
-
         });
 
 
@@ -283,13 +288,20 @@ public class DetailView extends JPanel {
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
-
-            //initializePreviewPanel();
             showData();
-            //generateOscarIconsSet(model.getModel(model.getSelectedMovieId()));
-
 
         });
+    }
+
+    public ImageIcon getPoster(){
+        String targetPoster = PATH_POSTERS + model.getSelectedMovieId() + ".jpg";
+        ImageIcon poster;
+        if(getClass().getResource(targetPoster) != null){
+            poster = new ImageIcon(getClass().getResource(targetPoster).getFile());
+        }else{
+            poster = new ImageIcon(getClass().getResource(IMAGE_NO_POSTERS));
+        }
+        return poster;
     }
 
     public void showData() {
@@ -300,12 +312,9 @@ public class DetailView extends JPanel {
         pp_director.setText(movie.getDirector());
         pp_actors.setText(movie.getMainActor());
 
-        String targetPoster = "../resources/poster/"+model.getSelectedMovieId()+".jpg";
-        ImageIcon poster =  new ImageIcon(getClass().getResource(targetPoster));
+        ImageIcon poster = getPoster();
         pp_poster.setIcon(poster);
-
-        //FLAG
-
+        pp_poster.updateUI();
 
         sp_YearText.setText(movie.getYearOfAward());
         sp_TitleText.setText(movie.getTitle());
@@ -315,14 +324,15 @@ public class DetailView extends JPanel {
         sp_GenreText.setText(movie.getGenre());
         sp_ProductionYearText.setText(movie.getYearOfProduction());
         sp_CountryText.setText(movie.getCountry());
-        sp_DurationText.setText(movie.getDuration().toString());
-        sp_FskText.setText(movie.getFsk());
         sp_ReleaseDateText.setText(movie.getYearOfProduction());
-        sp_OscarsText.setText(movie.getNumberOfOscars().toString());
+
+        sp_FskModel.setValue(movie.getFsk());
+        sp_OscarsModel.setValue(movie.getNumberOfOscars());
+        sp_DurationModel.setValue(movie.getDuration());
 
         generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
-        pp_oscars.updateUI();
+
 
     }
 
@@ -335,46 +345,56 @@ public class DetailView extends JPanel {
             oscarLabel.setIcon(oscar);
             pp_oscars.add(oscarLabel);
         }
-
+        pp_oscars.updateUI();
     }
 
     //FLAG
-    public void generateFlagIconsSet(Movie movie){
+    public void generateFlagIconsSet(Movie movie) {
         pp_flag.removeAll();
-        StringBuilder tempString = new StringBuilder(model.getList().get(model.getIndexById(model.getSelectedMovieId())).getCountry().toLowerCase());
-        while (tempString.length() != 0){
-            String targetFlag = setFlag(tempString.toString());
-            ImageIcon flag = new ImageIcon(getClass().getResource(targetFlag));
-            JLabel flagLabel = new JLabel();
-            flagLabel.setIcon(flag);
-            pp_flag.add(flagLabel);
-            tempString.delete(0,3);
+        String country = movie.getCountry();
+
+        if(country != null){
+            country = country.toLowerCase();
+            country = country.trim();
+
+            String[] countries = country.split("/");
+            for (int i=0; i<countries.length; i++){
+                String targetFlag = PATH_FLAGS + countries[i].trim() + ".png";
+                JLabel flagLabel = new JLabel();
+                if(getClass().getResource(targetFlag) != null){
+                    ImageIcon flag = new ImageIcon(getClass().getResource(targetFlag).getFile());
+                    flagLabel.setIcon(flag);
+                }
+                pp_flag.add(flagLabel);
+            }
         }
+        pp_flag.updateUI();
+
     }
 
     public static boolean isNumeric(String value) {
         try {
             int number = Integer.parseInt(value);
             return true;
-        }
-        catch(NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return false;
         }
     }
+
     //FLAG
-    public String setFlag(String allFlags){
-        StringBuilder stringFlag = new StringBuilder(allFlags);
-        String help,targetFlag;
-        for (int i=0;i<stringFlag.length();++i){
-            if (stringFlag.charAt(i)==' ' || stringFlag.charAt(i)==','||stringFlag.charAt(i)==';'){
-                    help = stringFlag.substring(i-2, i);
-                    targetFlag = "../resources/flags_iso/24/"+help+".png";
-                    return targetFlag;
-            }
-        }
-        help = (stringFlag.substring(stringFlag.length()-2,stringFlag.length()));
-        targetFlag = "../resources/flags_iso/24/"+help+".png";
-        return targetFlag;
-    }
+//    public String setFlag(String allFlags) {
+//        StringBuilder stringFlag = new StringBuilder(allFlags);
+//        String help, targetFlag;
+//        for (int i = 0; i < stringFlag.length(); ++i) {
+//            if (stringFlag.charAt(i) == ' ' || stringFlag.charAt(i) == ',' || stringFlag.charAt(i) == ';') {
+//                help = stringFlag.substring(i - 2, i);
+//                targetFlag = "../resources/flags_iso/24/" + help + ".png";
+//                return targetFlag;
+//            }
+//        }
+//        help = (stringFlag.substring(stringFlag.length() - 2, stringFlag.length()));
+//        targetFlag = "../resources/flags_iso/24/" + help + ".png";
+//        return targetFlag;
+//    }
 
 }

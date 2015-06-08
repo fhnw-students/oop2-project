@@ -75,8 +75,56 @@ public class AcademyController {
 	}
 
 	public void removeMovie(){
-
 //		model.remove(index);
+	}
+
+
+	public void onChangeCountry(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setCountry(value);
+	}
+
+	public void onChangeFsk(int value) {
+		model.getMovieById(model.getSelectedMovieId()).setFsk(value);
+	}
+
+	public void onChangeMainActor(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setMainActor(value);
+	}
+
+	public void onChangeDirector(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setDirector(value);
+	}
+
+	public void onChangeDuration(int value) {
+		model.getMovieById(model.getSelectedMovieId()).setDuration(value);
+	}
+
+	public void onChangeGenre(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setGenre(value);
+	}
+
+	public void onChangeNumberOfOscars(int value) {
+		model.getMovieById(model.getSelectedMovieId()).setNumberOfOscars(value);
+	}
+
+	public void onChangeStartDate(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setStartDate(value);
+	}
+
+	public void onChangeTitle(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setTitle(value);
+	}
+
+	public void onChangeTitleEnglish(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setTitleEnglish(value);
+	}
+
+	public void onChangeYearOfAward(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setYearOfAward(value);
+	}
+
+	public void onChangeYearOfProduction(String value) {
+		model.getMovieById(model.getSelectedMovieId()).setYearOfProduction(value);
 	}
 
 

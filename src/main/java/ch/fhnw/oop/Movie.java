@@ -20,11 +20,11 @@ public class Movie {
     private String titleEnglish;
     private String yearOfProduction;
     private String country;
-    private Integer duration;
-    private String fsk;
+    private int duration;
+    private int fsk;
     private String genre;
     private String startDate;
-    private Integer numberOfOscars =1;
+    private int numberOfOscars =1;
     private ImageIcon poster;
 
     /**
@@ -32,6 +32,8 @@ public class Movie {
      */
     public Movie() {
         this.hasModified = true;
+        this.duration = 0;
+        this.numberOfOscars = 1;
     }
 
     public Movie(String csvLine) {
@@ -45,7 +47,7 @@ public class Movie {
         this.yearOfProduction = splitted[6];
         this.country = splitted[7];
         this.duration = Integer.parseInt(splitted[8]);
-        this.fsk = splitted[9];
+        this.fsk = Integer.parseInt(splitted[9]);
         this.genre = splitted[10];
         this.startDate = splitted[11];
 
@@ -143,11 +145,11 @@ public class Movie {
         hasModified = true;
     }
 
-    public String getFsk() {
+    public int getFsk() {
         return fsk;
     }
 
-    public void setFsk(String fsk) {
+    public void setFsk(int fsk) {
         this.fsk = fsk;
         hasModified = true;
     }

@@ -163,7 +163,7 @@ public class AcademyModel implements Observable {
     public void add(Movie movie) {
         movie.setId(list.size());
         list.add(movie);
-        setSelectedMovieId(list.size() - 1);
+        setSelectedMovieId(movie.getId());
     }
 
     public void removeByIndex(int index){
