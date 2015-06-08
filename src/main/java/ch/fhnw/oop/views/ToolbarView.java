@@ -80,6 +80,7 @@ public class ToolbarView extends JToolBar {
 
     private void addEvents() {
         btnAdd.addActionListener(e -> controller.addNewMovie());
+        btnSave.addActionListener(e -> controller.save());
         btnRemove.addActionListener(e -> controller.removeMovie());
 
         model.addObserver(m -> {
