@@ -1,5 +1,7 @@
 # OOP2-Project
 
+![preview](preview.png)
+
 # Contributors
 - Gerhard Hirschfeld ([@hirsch88](https://twitter.com/GeryHirschfeld1))
 - David Heimgartner
