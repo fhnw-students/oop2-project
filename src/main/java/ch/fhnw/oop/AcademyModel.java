@@ -10,12 +10,19 @@ public class AcademyModel implements Observable {
     private static final String FILE_PATH = "./resources/data/movies.csv";
     private static final String STRING_BOL_TRUE = "X";
     private static final String STRING_BOL_FALSE = "";
+    public static final String ACTION_INSERT = "insert";
+    public static final String ACTION_UPDATE = "update";
+    public static final String ACTION_DELETE = "delete";
+    public static final String ACTION_NONE = "";
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
     private boolean isRedoAvailable = false;
 
     private int selectedMovieId;
+    public int observerIndex;
+
+    public String observerAction = "";
 
     private List<Movie> list = new ArrayList<>();
 
@@ -120,6 +127,11 @@ public class AcademyModel implements Observable {
         observers.forEach(observer -> observer.update(this));
     }
 
+    public void notifyObservers(String action) {
+        observerAction = action;
+        observers.forEach(observer -> observer.update(this));
+    }
+
     public boolean isUndoAvailable() {
         return isUndoAvailable;
     }
@@ -158,21 +170,23 @@ public class AcademyModel implements Observable {
         int maxId = list.stream().max(comp).get().getId();
         movie.setId(maxId + 1);
         list.add(movie);
-        setSelectedMovieId(movie.getId());
-    }
-
-    public void removeByIndex(int index) {
-        list.remove(index);
+        selectedMovieId = movie.getId();
+        observerIndex = getIndexByMovie(movie);
+        observerAction = ACTION_INSERT;
+        notifyObservers();
     }
 
     public void removeById(int id) {
-        int index = getIndexById(id);
-        list.remove(index);
-    }
-
-    public void removeByMovie(Movie movie) {
-        int index = getIndexByMovie(movie);
-        list.remove(index);
+        Integer index = getIndexById(id);
+        if (index.equals(list.size() - 1)) {
+            selectedMovieId = getMovieByIndex(index - 1).getId();
+        }else{
+            selectedMovieId = getMovieByIndex(index + 1).getId();
+        }
+        list.remove((int) index);
+        observerIndex = index;
+        observerAction = ACTION_DELETE;
+        notifyObservers();
     }
 
     public int getIndexById(int id) {

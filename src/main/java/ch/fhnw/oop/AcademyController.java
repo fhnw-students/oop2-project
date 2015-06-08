@@ -71,7 +71,7 @@ public class AcademyController {
 	}
 
 	public void removeMovie(){
-//		model.remove(index);
+		model.removeById(model.getSelectedMovieId());
 	}
 
 
