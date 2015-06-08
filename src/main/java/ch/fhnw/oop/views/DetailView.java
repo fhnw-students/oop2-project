@@ -100,9 +100,9 @@ public class DetailView extends JPanel {
     private JPanel initializePreviewPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new MigLayout(
-                "",
-                "[][][]",
-                "[][][][][]"
+                "fillx,gap 10!", //--> Layout Constraints
+                "[][grow][]", //--> Column Constraints
+                "[grow][grow][grow][grow][grow]"//--> Row Constraints
         ));
         panel.setBackground(Color.white);
 
