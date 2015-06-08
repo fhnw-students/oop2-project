@@ -105,7 +105,7 @@ public class ToolbarView extends JToolBar {
             AcademyModel academyModel = (AcademyModel) m;
 
             btnSave.setEnabled(
-                    academyModel.hasModelBeenChanged()
+                    academyModel.hasModelBeenChanged() && academyModel.editorIsValid()
             );
 
         });

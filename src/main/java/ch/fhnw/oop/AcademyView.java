@@ -3,6 +3,8 @@ package ch.fhnw.oop;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import ch.fhnw.oop.views.*;
 
@@ -61,6 +63,7 @@ public class AcademyView extends JFrame {
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, tableScrollPane, detail);
         splitPane.setDividerLocation(700);
 
+
         //set minimum Size of the Components
         Dimension minimumSize = new Dimension(500, 500);
         tableScrollPane.setMinimumSize(minimumSize);
@@ -92,6 +95,7 @@ public class AcademyView extends JFrame {
                 }
             }
         });
+
 
         model.addObserver(m -> {
             AcademyModel counterModel = (AcademyModel) m;

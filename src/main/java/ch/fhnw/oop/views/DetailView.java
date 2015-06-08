@@ -3,10 +3,13 @@ package ch.fhnw.oop.views;
 import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 import ch.fhnw.oop.Movie;
+import ch.fhnw.oop.MovieValidator;
+import com.sun.prism.paint.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.event.*;
 
 public class DetailView extends JPanel {
@@ -102,7 +105,7 @@ public class DetailView extends JPanel {
         panel.setLayout(new MigLayout(
                 "fillx,gap 10!", //--> Layout Constraints
                 "10[][grow][]", //--> Column Constraints
-                "10[shrink0]10[shrink 0]10[shrink 0]10[shrink 0]10[shrink 0]"//--> Row Constraints
+                "10[shrink 0]10[shrink 0]10[shrink 0]10[shrink 0]10[shrink 0]"//--> Row Constraints
         ));
         panel.setBackground(Color.white);
 
@@ -112,7 +115,8 @@ public class DetailView extends JPanel {
         panel.add(pp_oscars, "dock south");
 
         pp_poster = new JLabel();
-        panel.add(pp_poster, "dock east");
+        panel.add(pp_poster, "growx,dock east");
+
 
 
         pp_year = new JLabel("");
@@ -126,8 +130,10 @@ public class DetailView extends JPanel {
 
         pp_title = new JTextArea("");
         pp_title.setSize(300, 300);
-        pp_title.setLineWrap(true); //set new Line automatically
+        pp_title.getLineWrap();
+        pp_title.setLineWrap(true); //set new Line if title length > Text Area Size
         pp_title.setWrapStyleWord(true);
+
 
         pp_title.setFont(new Font("", Font.BOLD, 25));
         panel.add(pp_title, "span 3,wrap");
@@ -137,8 +143,9 @@ public class DetailView extends JPanel {
         panel.add(pp_von);
 
         pp_director = new JTextArea("");
-        pp_director.setSize(100, 100);
-        pp_director.setLineWrap(true); //set new Line automatically
+        pp_director.setSize(200, 200);
+        pp_director.getLineWrap();
+        //pp_director.setLineWrap(true); //set new Line automatically
         pp_director.setWrapStyleWord(true);
         pp_director.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT, 18));
         panel.add(pp_director, "wrap");
@@ -149,9 +156,9 @@ public class DetailView extends JPanel {
         panel.add(pp_mit);
 
         pp_actors = new JTextArea("");
-        pp_actors.setSize(100, 100);
-        pp_title.setLineWrap(true); //set new Line automatically
-        pp_title.setWrapStyleWord(true);
+        pp_actors.setSize(200, 200);
+        pp_actors.setLineWrap(true); //set new Line automatically
+        pp_actors.setWrapStyleWord(true);
         pp_actors.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT,18));
         panel.add(pp_actors, "wrap");
 
@@ -171,69 +178,73 @@ public class DetailView extends JPanel {
                 "10[]0[grow]50[]0[grow]", //--> Column Constraints
                 "[][][][][][][][][]"//--> Row Constraints
         ));
+        final String LABEL_WIDTH = "width :100:";
+        final String TEXT_BOTTOM = "growx, sg";
+        final String TEXT_UP = "span, wrap, growx";
+        final String TEXT_BOTTOM_WRAP = "growx, sg, wrap";
 
         sp_Year = new JLabel("Jahr:");
-        panel.add(sp_Year, "width :100:");
+        panel.add(sp_Year, LABEL_WIDTH);
         sp_YearText = new JTextField();
-        panel.add(sp_YearText, "span, wrap, growx");
+        panel.add(sp_YearText, TEXT_UP);
 
         sp_Title = new JLabel("Titel:");
-        panel.add(sp_Title, "width :100:");
+        panel.add(sp_Title, LABEL_WIDTH);
         sp_TitleText = new JTextField();
-        panel.add(sp_TitleText, "span, wrap, growx");
+        panel.add(sp_TitleText, TEXT_UP);
 
         sp_director = new JLabel("Regisseur:");
-        panel.add(sp_director, "width :100:");
+        panel.add(sp_director, LABEL_WIDTH);
         sp_directorText = new JTextField();
-        panel.add(sp_directorText, "span, wrap, growx");
+        panel.add(sp_directorText, TEXT_UP);
 
         sp_Actor = new JLabel("Hauptdarsteller:");
-        panel.add(sp_Actor, "width :100:");
+        panel.add(sp_Actor, LABEL_WIDTH);
         sp_ActorText = new JTextField();
-        panel.add(sp_ActorText, "span, wrap, growx");
+        panel.add(sp_ActorText, TEXT_UP);
 
         sp_TitleEng = new JLabel("Titel (eng):");
-        panel.add(sp_TitleEng, "width :100:");
+        panel.add(sp_TitleEng, LABEL_WIDTH);
         sp_TitleEngText = new JTextField();
-        panel.add(sp_TitleEngText, "span, wrap, growx");
+        panel.add(sp_TitleEngText, TEXT_UP);
 
         sp_Genre = new JLabel("Genre:");
-        panel.add(sp_Genre, "width :100:");
+        panel.add(sp_Genre, LABEL_WIDTH);
         sp_GenreText = new JTextField();
-        panel.add(sp_GenreText, "growx, sg");
+        panel.add(sp_GenreText, TEXT_BOTTOM);
 
         sp_ProductionYear = new JLabel("Produktionsjahr:");
-        panel.add(sp_ProductionYear, "width :0:");
+        panel.add(sp_ProductionYear, LABEL_WIDTH);
         sp_ProductionYearText = new JTextField();
-        panel.add(sp_ProductionYearText, "growx, sg, wrap");
+        panel.add(sp_ProductionYearText, TEXT_BOTTOM_WRAP);
 
         sp_Country = new JLabel("Land:");
-        panel.add(sp_Country, "width :100:");
+        panel.add(sp_Country, LABEL_WIDTH);
         sp_CountryText = new JTextField();
-        panel.add(sp_CountryText, "growx, sg");
+        panel.add(sp_CountryText, TEXT_BOTTOM);
 
         sp_Duration = new JLabel("Spieldauer:");
-        panel.add(sp_Duration, "width :0:");
+        panel.add(sp_Duration, LABEL_WIDTH);
         sp_DurationModel = new SpinnerNumberModel(1, 1, 1000, 1);
         sp_DurationText = new JSpinner(sp_DurationModel);
-        panel.add(sp_DurationText, "growx, sg, wrap");
+        panel.add(sp_DurationText, TEXT_BOTTOM_WRAP);
 
         sp_Fsk = new JLabel("FSK:");
-        panel.add(sp_Fsk, "width :100:");
+        panel.add(sp_Fsk, LABEL_WIDTH);
         sp_FskModel = new SpinnerNumberModel(0, 0, 21, 1);
         sp_FskText = new JSpinner(sp_FskModel);
-        panel.add(sp_FskText, "growx, sg");
+        panel.add(sp_FskText, TEXT_BOTTOM);
 
         sp_ReleaseDate = new JLabel("Releasedatum:");
-        panel.add(sp_ReleaseDate, "width :0:");
+        panel.add(sp_ReleaseDate, LABEL_WIDTH);
         sp_ReleaseDateText = new JTextField();
-        panel.add(sp_ReleaseDateText, "growx, sg, wrap");
+        panel.add(sp_ReleaseDateText, TEXT_BOTTOM_WRAP);
 
         sp_Oscars = new JLabel("Oscars:");
-        panel.add(sp_Oscars, "width :100:");
+        panel.add(sp_Oscars, LABEL_WIDTH);
         sp_OscarsModel = new SpinnerNumberModel(1, 1, 20, 1);
         sp_OscarsText = new JSpinner(sp_OscarsModel);
-        panel.add(sp_OscarsText, "growx, sg");
+        panel.add(sp_OscarsText, TEXT_BOTTOM);
 
         return panel;
     }
@@ -255,7 +266,6 @@ public class DetailView extends JPanel {
             @Override
             public void keyReleased(KeyEvent e) {
                 controller.setValueAtSelectedRow(sp_YearText.getText(), TableView.TableModel.COL_YEAR);
-                pp_year.setText(model.getMovieById(model.getSelectedMovieId()).getYearOfAward());
             }
         });
 
@@ -319,6 +329,16 @@ public class DetailView extends JPanel {
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
+
+            Movie movie = academyModel.getMovieById(academyModel.getSelectedMovieId());
+
+            sp_YearText.setBackground(
+                    (MovieValidator.isValidYear(
+                            movie.getYearOfAward()
+                    )?Color.white:Color.red)
+            );
+
+
             showData();
         });
     }
@@ -403,14 +423,14 @@ public class DetailView extends JPanel {
 
     }
 
-    public static boolean isNumeric(String value) {
-        try {
-            int number = Integer.parseInt(value);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
+    //public static boolean isNumeric(String value) {
+//        try {
+//            int number = Integer.parseInt(value);
+//            return true;
+//            } catch (NumberFormatException e)
+//          return false;
+//        }
+//    }
 
     //FLAG
 //    public String setFlag(String allFlags) {

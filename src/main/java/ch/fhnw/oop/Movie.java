@@ -208,6 +208,7 @@ public class Movie {
         return !newValue.equals(oldValue);
     }
 
+
     @Override
     public String toString() {
         List<String> rows = new ArrayList<>();

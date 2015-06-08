@@ -347,4 +347,46 @@ public class AcademyModel implements Observable {
         notifyObservers();
 
     }
+
+    public boolean editorIsValid() {
+        Movie movie = getMovieById(getSelectedMovieId());
+
+        if(!MovieValidator.isValidYear(movie.getYearOfAward())){
+            return false;
+        }
+
+        if(!MovieValidator.isRequired(movie.getTitle())){
+            return false;
+        }
+
+        if(!MovieValidator.isRequired(movie.getDirector())){
+            return false;
+        }
+
+        if(!MovieValidator.isRequired(movie.getMainActor())){
+            return false;
+        }
+
+        if(!MovieValidator.isDate(movie.getStartDate())){
+            return false;
+        }
+
+        if(!MovieValidator.isFlag(movie.getCountry())){
+            return false;
+        }
+
+        if(!MovieValidator.isNumber(movie.getFsk().toString())){
+            return false;
+        }
+
+        if(!MovieValidator.isNumber(movie.getDuration().toString())){
+            return false;
+        }
+
+        if(!MovieValidator.isNumber(movie.getNumberOfOscars().toString()) || movie.getNumberOfOscars()<1){
+            return false;
+        }
+
+        return true;
+    }
 }
