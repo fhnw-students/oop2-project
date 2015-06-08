@@ -21,7 +21,7 @@ public class DetailView extends JPanel {
 
     // Attributes of preview_panel
     private JLabel pp_year;
-    private JLabel pp_title;
+    private JTextArea pp_title;
     private JLabel pp_von;
     private JLabel pp_mit;
     private JLabel pp_director;
@@ -125,9 +125,15 @@ public class DetailView extends JPanel {
         pp_flag.setBackground(Color.white);
         panel.add(pp_flag, "wrap,right");
 
-        pp_title = new JLabel("");
+        pp_title = new JTextArea("");
+        pp_title.setSize(300,300);
+
+        //set new Line automatically 
+        pp_title.setLineWrap(true);
+        pp_title.setWrapStyleWord(true);
+
         pp_title.setFont(new Font("", Font.BOLD, 25));
-        panel.add(pp_title, "span 2,wrap");
+        panel.add(pp_title, "span 3,wrap");
 
         pp_von = new JLabel("von");
         pp_von.setFont(new Font("", Font.BOLD, 18));
