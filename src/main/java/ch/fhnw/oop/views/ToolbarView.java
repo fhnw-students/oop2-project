@@ -54,8 +54,8 @@ public class ToolbarView extends JToolBar {
         buttons.add(btnAdd);
         buttons.add(btnRemove);
         buttons.addSeparator();
-        buttons.add(btnRedo);
         buttons.add(btnUndo);
+        buttons.add(btnRedo);
         this.add(buttons, BorderLayout.WEST);
 
         // Search field
@@ -68,8 +68,8 @@ public class ToolbarView extends JToolBar {
         btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
         btnAdd = makeNavigationButton("Plus", "add", "Add changes", "Add");
         btnRemove = makeNavigationButton("Minus", "remove", "Remove changes", "Remove");
-        btnRedo = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
         btnUndo = makeNavigationButton("Undo", "undo", "Undo changes", "Undo");
+        btnRedo = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
         buttons = new JToolBar();
         searchField = new JTextField(30);
 
