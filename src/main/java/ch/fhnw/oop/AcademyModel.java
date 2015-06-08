@@ -162,7 +162,7 @@ public class AcademyModel implements Observable {
                 .map(Movie::isHasModified)
                 .filter(a -> a)
                 .count();
-        return counter > 0 || this.aMovieHasBeenRemoved;
+        return counter > 0 || aMovieHasBeenRemoved;
     }
 
     public void add(Movie movie) {
@@ -186,7 +186,7 @@ public class AcademyModel implements Observable {
         this.list.remove((int) index);
         this.observerIndex = index;
         this.observerAction = ACTION_DELETE;
-        this.aMovieHasBeenRemoved = true;
+        aMovieHasBeenRemoved = true;
         notifyObservers();
     }
 
@@ -277,7 +277,7 @@ public class AcademyModel implements Observable {
     private void pristineList() {
         this.list.stream().forEach(movie -> movie.setHasModified(false));
         this.observerAction = ACTION_PRISTINE;
-        this.aMovieHasBeenRemoved = false;
+        aMovieHasBeenRemoved = false;
         this.notifyObservers();
     }
 
