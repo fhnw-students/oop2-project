@@ -5,13 +5,7 @@ import ch.fhnw.oop.AcademyModel;
 import ch.fhnw.oop.Movie;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.net.URL;
 
 
@@ -37,9 +31,9 @@ public class TableView extends JTable {
     private void addEvents() {
         this.getSelectionModel().addListSelectionListener(event -> {
             if (this.getSelectedRow() > -1) {
-                Movie selectedMovie = this.model.getList().get(this.getSelectedRow());
-                this.model.setSelectedMovieId(selectedMovie.getId());
-                tableModel.fireTableRowsUpdated(0, model.getList().size() - 1);
+                Movie movie = this.model.getMovieByIndex(this.getSelectedRow());
+                this.model.setSelectedMovieId(movie.getId());
+                refreshTable(model.getFilteredList().size());
             }
         });
 
@@ -67,7 +61,13 @@ public class TableView extends JTable {
                     break;
 
                 case AcademyModel.ACTION_PRISTINE:
+                    refreshTable(academyModel.getFilteredList().size()-1);
+                    break;
+
+                case AcademyModel.ACTION_SEARCH:
                     refreshTable(academyModel.getList().size()-1);
+//                    tableModel.fireTableDataChanged();
+
                     break;
             }
 
@@ -110,7 +110,7 @@ public class TableView extends JTable {
         }
 
         public int getRowCount() {
-            return model.getList().size();
+            return model.getFilteredList().size();
         }
 
         public String getColumnName(int col) {
@@ -123,9 +123,10 @@ public class TableView extends JTable {
             if (col == 0) {
 
                 String path = TableModel.MARK_EMPTY;
-                if (model.getRow(row).getId() == model.getSelectedMovieId()) {
+                Movie movie = model.getMovieByIndex(row);
+                if(movie.getId().equals(model.getSelectedMovieId())){
                     path = TableModel.MARK_BLUE;
-                } else if (model.getRow(row).isHasModified()) {
+                }else if(movie.isHasModified()){
                     path = TableModel.MARK_ORANGE;
                 }
 

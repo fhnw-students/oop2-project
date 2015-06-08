@@ -6,8 +6,9 @@ import ch.fhnw.oop.AcademyModel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.net.URL;
-import java.util.stream.Collectors;
 
 
 public class ToolbarView extends JToolBar {
@@ -83,6 +84,23 @@ public class ToolbarView extends JToolBar {
         btnSave.addActionListener(e -> controller.save());
         btnRemove.addActionListener(e -> controller.removeMovie());
 
+        searchField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.onChangeSearch(searchField.getText());
+            }
+        });
+
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
 
@@ -114,7 +132,6 @@ public class ToolbarView extends JToolBar {
         JButton button = new JButton();
         button.setActionCommand(actionCommand);
         button.setToolTipText(toolTipText);
-//        button.addActionListener(this);
 
         if (imageURL != null) {                      //image found
             button.setIcon(new ImageIcon(imageURL, altText));
@@ -124,7 +141,6 @@ public class ToolbarView extends JToolBar {
             System.err.println("Resource not found: "
                     + imgLocation);
         }
-
 
         button.setOpaque(false);
         button.setBorderPainted(false);

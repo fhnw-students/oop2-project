@@ -21,7 +21,7 @@ public class AcademyApp {
         } catch (IllegalAccessException e) {
             // handle exception
         }
-        
+
         final AcademyModel model = new AcademyModel();
         final AcademyController controller = new AcademyController(model);
         final AcademyView view = new AcademyView(model, controller);

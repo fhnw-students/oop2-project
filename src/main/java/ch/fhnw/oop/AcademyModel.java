@@ -14,6 +14,7 @@ public class AcademyModel implements Observable {
     public static final String ACTION_UPDATE = "update";
     public static final String ACTION_DELETE = "delete";
     public static final String ACTION_PRISTINE = "pristine";
+    public static final String ACTION_SEARCH = "search";
     public static final String ACTION_NONE = "";
     private static String csvFileHeader;
     private static boolean aMovieHasBeenRemoved = false;
@@ -25,22 +26,29 @@ public class AcademyModel implements Observable {
     public int observerIndex;
     public String observerAction = "";
     private List<Movie> list = new ArrayList<>();
+    private List<Movie> filterdList = new ArrayList<>();
+    private String searchValue = "";
+    private FuzzySearch fuzzySearch;
 
     public AcademyModel() throws IOException, URISyntaxException {
-        list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
+        filterdList = list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
         selectedMovieId = list.get(0).getId();
     }
 
-    public List<Movie> getList() {
-        return list;
+    public List<Movie> getList(){
+        return this.list;
+    }
+
+    public List<Movie> getFilteredList() {
+        return filterdList;
     }
 
     public Movie getRow(int index) {
-        return list.get(index);
+        return filterdList.get(index);
     }
 
     public String getValueAt(int index, int col) {
-        Movie movie = list.get(index);
+        Movie movie = filterdList.get(index);
         switch (col) {
             case 0:
                 return movie.isHasModified() ? STRING_BOL_TRUE : STRING_BOL_FALSE;
@@ -56,7 +64,7 @@ public class AcademyModel implements Observable {
     }
 
     public void setValueAt(String value, int index, int col) {
-        Movie movie = list.get(index);
+        Movie movie = filterdList.get(index);
         switch (col) {
             case 0:
                 movie.setHasModified((value.equals(STRING_BOL_TRUE)));
@@ -73,7 +81,7 @@ public class AcademyModel implements Observable {
             default:
                 movie.setMainActor(value);
         }
-        list.set(index, movie);
+        filterdList.set(index, movie);
         notifyObservers();
     }
 
@@ -211,7 +219,7 @@ public class AcademyModel implements Observable {
     }
 
     public Movie getMovieByIndex(int index) {
-        return list.get(index);
+        return filterdList.get(index);
     }
 
     public void setSelectedMovieCountry(String value) {
@@ -316,6 +324,27 @@ public class AcademyModel implements Observable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+
+    public String getSearchValue() {
+        return searchValue;
+    }
+
+    public void setSearchValue(String searchValue) {
+        if (searchValue.length() > 2) {
+            this.searchValue = searchValue;
+            this.fuzzySearch = new FuzzySearch(this);
+            this.filterdList = fuzzySearch.filter(searchValue);
+            this.setSelectedMovieId(this.filterdList.get(0).getId());
+        } else {
+            this.searchValue = "";
+            this.filterdList =  this.list;
+        }
+
+        this.observerAction = ACTION_SEARCH;
+        notifyObservers();
 
     }
 }
