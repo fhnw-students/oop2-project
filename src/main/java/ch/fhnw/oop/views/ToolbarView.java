@@ -7,6 +7,7 @@ import ch.fhnw.oop.AcademyModel;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
+import java.util.stream.Collectors;
 
 
 public class ToolbarView extends JToolBar {
@@ -28,7 +29,6 @@ public class ToolbarView extends JToolBar {
     public ToolbarView(AcademyModel model, AcademyController controller) {
         this.model = model;
         this.controller = controller;
-
         this.createAndShow();
     }
 
@@ -59,7 +59,6 @@ public class ToolbarView extends JToolBar {
         this.add(buttons, BorderLayout.WEST);
 
         // Search field
-//        searchField.setSize(100, 100);
         this.add(searchField, BorderLayout.EAST);
 
     }
@@ -71,20 +70,25 @@ public class ToolbarView extends JToolBar {
         btnRemove = makeNavigationButton("Minus", "remove", "Remove changes", "Remove");
         btnRedo = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
         btnUndo = makeNavigationButton("Undo", "undo", "Undo changes", "Undo");
-
         buttons = new JToolBar();
         searchField = new JTextField(30);
 
+        btnSave.setEnabled(false);
+        btnRedo.setEnabled(false);
+        btnUndo.setEnabled(false);
     }
 
     private void addEvents() {
-
         btnAdd.addActionListener(e -> controller.addNewMovie());
-
         btnRemove.addActionListener(e -> controller.removeMovie());
 
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
+
+            btnSave.setEnabled(
+                    academyModel.hasModelBeenChanged()
+            );
+
         });
     }
 

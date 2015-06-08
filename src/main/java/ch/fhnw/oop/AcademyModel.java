@@ -165,6 +165,14 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
+    public boolean hasModelBeenChanged(){
+        long counter = list.stream()
+                .map(Movie::isHasModified)
+                .filter(a -> a)
+                .count();
+        return counter > 0;
+    }
+
     public void add(Movie movie) {
         final Comparator<Movie> comp = (p1, p2) -> Integer.compare(p1.getId(), p2.getId());
         int maxId = list.stream().max(comp).get().getId();
