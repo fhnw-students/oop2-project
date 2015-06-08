@@ -65,10 +65,6 @@ public class AcademyController {
 	}
 
 
-	public void setNumberOfOscarsAtSelectedMovie(int amount) {
-		model.setNumberOfOscarsAtSelectedMovie(amount);
-	}
-
 	public void addNewMovie(){
 		Movie movie = new Movie();
 		model.add(movie);
@@ -80,51 +76,51 @@ public class AcademyController {
 
 
 	public void onChangeCountry(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setCountry(value);
+		model.setSelectedMovieCountry(value);
 	}
 
 	public void onChangeFsk(int value) {
-		model.getMovieById(model.getSelectedMovieId()).setFsk(value);
+		model.setSelectedMovieFsk(value);
 	}
 
 	public void onChangeMainActor(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setMainActor(value);
+		model.setSelectedMovieMainActor(value);
 	}
 
 	public void onChangeDirector(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setDirector(value);
+		model.setSelectedMovieDirector(value);
 	}
 
 	public void onChangeDuration(int value) {
-		model.getMovieById(model.getSelectedMovieId()).setDuration(value);
+		model.setSelectedMovieDuration(value);
 	}
 
 	public void onChangeGenre(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setGenre(value);
+		model.setSelectedMovieGenre(value);
 	}
 
 	public void onChangeNumberOfOscars(int value) {
-		model.getMovieById(model.getSelectedMovieId()).setNumberOfOscars(value);
+		model.setSelectedMovieNumberOfOscars(value);
 	}
 
 	public void onChangeStartDate(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setStartDate(value);
+		model.setSelectedMovieStartDate(value);
 	}
 
 	public void onChangeTitle(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setTitle(value);
+		model.setSelectedMovieTitle(value);
 	}
 
 	public void onChangeTitleEnglish(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setTitleEnglish(value);
+		model.setSelectedMovieTitleEnglish(value);
 	}
 
 	public void onChangeYearOfAward(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setYearOfAward(value);
+		model.setSelectedMovieYearOfAward(value);
 	}
 
 	public void onChangeYearOfProduction(String value) {
-		model.getMovieById(model.getSelectedMovieId()).setYearOfProduction(value);
+		model.setSelectedMovieYearOfProduction(value);
 	}
 
 

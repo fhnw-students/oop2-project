@@ -341,7 +341,6 @@ public class DetailView extends JPanel {
         generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
 
-
     }
 
     public void generateOscarIconsSet(Movie movie) {

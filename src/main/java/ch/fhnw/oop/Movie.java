@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie{
+public class Movie {
 
     /**
      * Variables
@@ -37,7 +37,7 @@ public class Movie{
     public Movie() {
         this.hasModified = true;
         this.fsk = 0;
-        this.duration = 0;
+        this.duration = 1;
         this.numberOfOscars = 1;
         this.startDate = "-";
     }
@@ -46,7 +46,7 @@ public class Movie{
         this.id = id;
         this.hasModified = true;
         this.fsk = 0;
-        this.duration = 0;
+        this.duration = 1;
         this.numberOfOscars = 1;
         this.startDate = "-";
     }
@@ -204,16 +204,12 @@ public class Movie{
         return this.poster;
     }
 
-//    private boolean validateChange(Integer newValue, Integer oldValue) {
-//        return !newValue.equals(oldValue);
-//    }
-
     private boolean validateChange(Object newValue, Object oldValue) {
         return !newValue.equals(oldValue);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         List<String> rows = new ArrayList<>();
         rows.add(this.id.toString());
         rows.add(this.title);
