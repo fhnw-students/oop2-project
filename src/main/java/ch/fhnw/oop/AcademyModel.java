@@ -8,6 +8,8 @@ import java.util.*;
 public class AcademyModel implements Observable {
 
     private static final String FILE_PATH = "./resources/data/movies.csv";
+    private static final String STRING_BOL_TRUE = "X";
+    private static final String STRING_BOL_FALSE = "";
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
@@ -22,12 +24,12 @@ public class AcademyModel implements Observable {
         selectedMovieId = list.get(0).getId();
     }
 
-    public void setActorsAtSelectedMovie(String actor) {
-        Movie movie = list.get(selectedMovieId);
-        movie.setMainActor(actor);
-        list.set(selectedMovieId, movie);
-        notifyObservers();
-    }
+//    public void setActorsAtSelectedMovie(String actor) {
+//        Movie movie = list.get(selectedMovieId);
+//        movie.setMainActor(actor);
+//        list.set(selectedMovieId, movie);
+//        notifyObservers();
+//    }
 
     public List<Movie> getList() {
         return list;
@@ -41,7 +43,7 @@ public class AcademyModel implements Observable {
         Movie movie = list.get(index);
         switch (col) {
             case 0:
-                return movie.isHasModified() ? "X" : "";
+                return movie.isHasModified() ? STRING_BOL_TRUE : STRING_BOL_FALSE;
             case 1:
                 return movie.getYearOfAward();
             case 2:
@@ -57,7 +59,7 @@ public class AcademyModel implements Observable {
         Movie movie = list.get(index);
         switch (col) {
             case 0:
-                movie.setHasModified((value == "X"));
+                movie.setHasModified((value.equals(STRING_BOL_TRUE)));
                 break;
             case 1:
                 movie.setYearOfAward(value);
@@ -142,7 +144,6 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
-
     public int getSelectedMovieId() {
         return selectedMovieId;
     }
@@ -150,11 +151,6 @@ public class AcademyModel implements Observable {
     public void setSelectedMovieId(int selectedMovieId) {
         this.selectedMovieId = selectedMovieId;
         notifyObservers();
-    }
-
-    public Movie getModel(int row) {
-        Movie movie = list.get(row);
-        return movie;
     }
 
     public void add(Movie movie) {
@@ -202,13 +198,6 @@ public class AcademyModel implements Observable {
     public Movie getMovieByIndex(int index) {
         return list.get(index);
     }
-
-//    public void setNumberOfOscarsAtSelectedMovie(int amount) {
-//        Movie movie = getMovieById(getSelectedMovieId());
-//        movie.setNumberOfOscars(amount);
-//        notifyObservers();
-//    }
-
 
     public void setSelectedMovieCountry(String value) {
         this.getMovieById(this.getSelectedMovieId()).setCountry(value);

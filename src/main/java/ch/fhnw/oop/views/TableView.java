@@ -91,10 +91,6 @@ public class TableView extends JTable {
             return columnNames[col];
         }
 
-        public Movie getModel(int row) {
-            return model.getModel(row);
-        }
-
         public Object getValueAt(int row, int col) {
             Object value = model.getValueAt(row, col);
 
