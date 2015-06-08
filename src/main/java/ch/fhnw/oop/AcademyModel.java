@@ -16,6 +16,7 @@ public class AcademyModel implements Observable {
     public static final String ACTION_PRISTINE = "pristine";
     public static final String ACTION_NONE = "";
     private static String csvFileHeader;
+    private static boolean aMovieHasBeenRemoved = false;
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
@@ -161,30 +162,31 @@ public class AcademyModel implements Observable {
                 .map(Movie::isHasModified)
                 .filter(a -> a)
                 .count();
-        return counter > 0;
+        return counter > 0 || this.aMovieHasBeenRemoved;
     }
 
     public void add(Movie movie) {
         final Comparator<Movie> comp = (p1, p2) -> Integer.compare(p1.getId(), p2.getId());
-        int maxId = list.stream().max(comp).get().getId();
+        int maxId = this.list.stream().max(comp).get().getId();
         movie.setId(maxId + 1);
-        list.add(movie);
-        selectedMovieId = movie.getId();
-        observerIndex = getIndexByMovie(movie);
-        observerAction = ACTION_INSERT;
+        this.list.add(movie);
+        this.selectedMovieId = movie.getId();
+        this.observerIndex = getIndexByMovie(movie);
+        this.observerAction = ACTION_INSERT;
         notifyObservers();
     }
 
     public void removeById(int id) {
         Integer index = getIndexById(id);
-        if (index.equals(list.size() - 1)) {
-            selectedMovieId = getMovieByIndex(index - 1).getId();
+        if (index.equals(this.list.size() - 1)) {
+            this.selectedMovieId = getMovieByIndex(index - 1).getId();
         } else {
-            selectedMovieId = getMovieByIndex(index + 1).getId();
+            this.selectedMovieId = getMovieByIndex(index + 1).getId();
         }
-        list.remove((int) index);
-        observerIndex = index;
-        observerAction = ACTION_DELETE;
+        this.list.remove((int) index);
+        this.observerIndex = index;
+        this.observerAction = ACTION_DELETE;
+        this.aMovieHasBeenRemoved = true;
         notifyObservers();
     }
 
@@ -275,6 +277,7 @@ public class AcademyModel implements Observable {
     private void pristineList() {
         this.list.stream().forEach(movie -> movie.setHasModified(false));
         this.observerAction = ACTION_PRISTINE;
+        this.aMovieHasBeenRemoved = false;
         this.notifyObservers();
     }
 
@@ -291,20 +294,20 @@ public class AcademyModel implements Observable {
                 );
 
 
-            // Add header line
-            br.write(csvFileHeader);
-            br.newLine();
-            // Add body
-            for (Movie movie : this.list) {
-                try {
-                    br.write(movie.toString());
-                    br.newLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                // Add header line
+                br.write(csvFileHeader);
+                br.newLine();
+                // Add body
+                for (Movie movie : this.list) {
+                    try {
+                        br.write(movie.toString());
+                        br.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            br.close();
-            this.pristineList();
+                br.close();
+                this.pristineList();
 
             } catch (URISyntaxException e) {
                 e.printStackTrace();
