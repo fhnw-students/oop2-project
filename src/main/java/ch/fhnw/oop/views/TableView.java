@@ -49,6 +49,10 @@ public class TableView extends JTable {
         tableModel.fireTableRowsUpdated(index, index);
     }
 
+    public void refreshTable(int index){
+        tableModel.fireTableRowsUpdated(0, index);
+    }
+
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
@@ -62,6 +66,9 @@ public class TableView extends JTable {
                     tableModel.fireTableRowsDeleted(academyModel.observerIndex, academyModel.observerIndex);
                     break;
 
+                case AcademyModel.ACTION_PRISTINE:
+                    refreshTable(academyModel.getList().size()-1);
+                    break;
             }
 
             refreshSelectedMovie(academyModel.getIndexById(academyModel.getSelectedMovieId()));

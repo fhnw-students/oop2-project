@@ -13,30 +13,23 @@ public class AcademyModel implements Observable {
     public static final String ACTION_INSERT = "insert";
     public static final String ACTION_UPDATE = "update";
     public static final String ACTION_DELETE = "delete";
+    public static final String ACTION_PRISTINE = "pristine";
     public static final String ACTION_NONE = "";
+    private static String csvFileHeader;
+    private static boolean aMovieHasBeenRemoved = false;
 
     private final Set<Observer> observers = new HashSet<>();
     private boolean isUndoAvailable = false;
     private boolean isRedoAvailable = false;
-
     private int selectedMovieId;
     public int observerIndex;
-
     public String observerAction = "";
-
     private List<Movie> list = new ArrayList<>();
 
     public AcademyModel() throws IOException, URISyntaxException {
         list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
         selectedMovieId = list.get(0).getId();
     }
-
-//    public void setActorsAtSelectedMovie(String actor) {
-//        Movie movie = list.get(selectedMovieId);
-//        movie.setMainActor(actor);
-//        list.set(selectedMovieId, movie);
-//        notifyObservers();
-//    }
 
     public List<Movie> getList() {
         return list;
@@ -85,14 +78,13 @@ public class AcademyModel implements Observable {
     }
 
     private static List<Movie> readCSVFile(URI csvFileName) throws IOException {
-
         String line;
         BufferedReader stream = null;
         List<Movie> csvData = new ArrayList<>();
 
         try {
             stream = new BufferedReader(new FileReader(new File(csvFileName)));
-            stream.readLine();
+            csvFileHeader = stream.readLine();
             while ((line = stream.readLine()) != null) {
                 csvData.add(new Movie(line));
             }
@@ -165,35 +157,36 @@ public class AcademyModel implements Observable {
         notifyObservers();
     }
 
-    public boolean hasModelBeenChanged(){
+    public boolean hasModelBeenChanged() {
         long counter = list.stream()
                 .map(Movie::isHasModified)
                 .filter(a -> a)
                 .count();
-        return counter > 0;
+        return counter > 0 || aMovieHasBeenRemoved;
     }
 
     public void add(Movie movie) {
         final Comparator<Movie> comp = (p1, p2) -> Integer.compare(p1.getId(), p2.getId());
-        int maxId = list.stream().max(comp).get().getId();
+        int maxId = this.list.stream().max(comp).get().getId();
         movie.setId(maxId + 1);
-        list.add(movie);
-        selectedMovieId = movie.getId();
-        observerIndex = getIndexByMovie(movie);
-        observerAction = ACTION_INSERT;
+        this.list.add(movie);
+        this.selectedMovieId = movie.getId();
+        this.observerIndex = getIndexByMovie(movie);
+        this.observerAction = ACTION_INSERT;
         notifyObservers();
     }
 
     public void removeById(int id) {
         Integer index = getIndexById(id);
-        if (index.equals(list.size() - 1)) {
-            selectedMovieId = getMovieByIndex(index - 1).getId();
-        }else{
-            selectedMovieId = getMovieByIndex(index + 1).getId();
+        if (index.equals(this.list.size() - 1)) {
+            this.selectedMovieId = getMovieByIndex(index - 1).getId();
+        } else {
+            this.selectedMovieId = getMovieByIndex(index + 1).getId();
         }
-        list.remove((int) index);
-        observerIndex = index;
-        observerAction = ACTION_DELETE;
+        this.list.remove((int) index);
+        this.observerIndex = index;
+        this.observerAction = ACTION_DELETE;
+        aMovieHasBeenRemoved = true;
         notifyObservers();
     }
 
@@ -281,5 +274,48 @@ public class AcademyModel implements Observable {
         this.notifyObservers();
     }
 
+    private void pristineList() {
+        this.list.stream().forEach(movie -> movie.setHasModified(false));
+        this.observerAction = ACTION_PRISTINE;
+        aMovieHasBeenRemoved = false;
+        this.notifyObservers();
+    }
 
+    public void exportListToCsv() {
+        BufferedWriter br;
+        try {
+            try {
+                br = new BufferedWriter(
+                        new FileWriter(
+                                new File(
+                                        AcademyModel.class.getResource(FILE_PATH).toURI()
+                                )
+                        )
+                );
+
+
+                // Add header line
+                br.write(csvFileHeader);
+                br.newLine();
+                // Add body
+                for (Movie movie : this.list) {
+                    try {
+                        br.write(movie.toString());
+                        br.newLine();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                br.close();
+                this.pristineList();
+
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

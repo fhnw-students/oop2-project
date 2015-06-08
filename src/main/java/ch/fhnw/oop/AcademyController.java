@@ -3,6 +3,8 @@ package ch.fhnw.oop;
 
 import ch.fhnw.oop.views.DetailView;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -124,4 +126,7 @@ public class AcademyController {
 	}
 
 
+	public void save() {
+		this.model.exportListToCsv();
+	}
 }

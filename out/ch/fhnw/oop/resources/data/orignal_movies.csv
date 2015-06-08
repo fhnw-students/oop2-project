@@ -1,5 +1,5 @@
 #id;Title;yearOfAward;director;mainActor;titleEnglish;yearOfProduction;country;duration;fsk;genre;startDate
-0;Borda;1929;Harry Beaumont;Anita Page, Bessie Love;The Broadway Melody;1929;US;100;12;Musikfilm;-;1
+0;Broadway Melody;1929;Harry Beaumont;Anita Page, Bessie Love;The Broadway Melody;1929;US;100;12;Musikfilm;-;1
 1;Im Westen nichts Neues;1931;Lewis Milestone;Louis Wolheim, Lew Ayres;All Quiet on the Western Front;1930;US;136;12;Drama;04.12.1930;1
 2;Pioniere des wilden Westens ;1932;Wesley Ruggles;Richard Dix, Irene Dunne;Cimarron;1931;US;123;12;Drama, Western;-;1
 3;Menschen im Hotel;1933;Edmund Goulding;Greta Garbo, John Barrymore;Grand Hotel;1932;US;110;16;Drama;14.02.1933;1
@@ -75,11 +75,10 @@
 73;Chicago;2003;Rob Marshall;Queen Latifah, Richard Gere;Chicago;2002;CA/US;113;12;Komödie, Kriminalfilm, Musikfilm, Drama;27.02.2003;1
 74;Der Herr der Ringe: Die Rückkehr des Königs;2004;Peter Jackson;Elijah Wood, Ian McKellen;The Lord of the Rings: The Return of the King;2003;NZ/US;200;16;Fantasyfilm, Historienfilm, Abenteuerfilm;17.12.2003;1
 75;Million Dollar Baby;2005;Clint Eastwood;Clint Eastwood, Hilary Swank;Million Dollar Baby;2004;US;133;12;Drama, Sportfilm;24.03.2005;1
-76;L.A. Crash -test;2006;Paul Haggis;Sandra Bullock, Don Cheadle;Crash;2004;US;113;12;Drama;04.08.2005;1
+76;L.A. Crash;2006;Paul Haggis;Sandra Bullock, Don Cheadle;Crash;2004;US;113;12;Drama;04.08.2005;1
 77;Departed - Unter Feinden;2007;Martin Scorsese;Leonardo DiCaprio, Matt Damon;The Departed;2006;US;155;16;Drama, Kriminalfilm, Thriller;07.12.2006;1
 78;No Country for Old Men;2008;Ethan Coen, Joel Coen;Tommy Lee Jones, Javier Bardem;No Country for Old Men;2007;US;122;16;Kriminalfilm, Thriller, Drama, Western;28.02.2008;1
 79;Slumdog Millionär;2009;Danny Boyle;Dev Patel, Anil Kapoor;Slumdog Millionaire;2008;GB/US;120;12;Drama;19.03.2009;1
 80;Tödliches Kommando - The Hurt Locker;2010;Kathryn Bigelow;Jeremy Renner, Anthony Mackie;The Hurt Locker;2008;US;131;16;Drama, Thriller, Actionfilm;13.08.2009;1
 81;The King's Speech - Die Rede des Königs;2011;Tom Hooper;Colin Firth, Geoffrey Rush;The King's Speech;2010;AU/GB;118;0;Drama, Historienfilm;17.02.2011;1
 82;The Artist;2012;Michel Hazanavicius;Jean Dujardin, Bérénice Bejo;The Artist;2011;BE/FR;100;6;Drama, Komödie;26.01.2012;1
-83;Star Wars;2016;Ich;Du;Star Wars;2014;US/CH;400;18;All;20.05.2016;1
