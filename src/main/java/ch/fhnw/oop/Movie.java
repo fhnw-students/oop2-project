@@ -5,7 +5,6 @@ import com.sun.deploy.util.StringUtils;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringJoiner;
 
 public class Movie{
 
@@ -37,8 +36,19 @@ public class Movie{
      */
     public Movie() {
         this.hasModified = true;
+        this.fsk = 0;
         this.duration = 0;
         this.numberOfOscars = 1;
+        this.startDate = "-";
+    }
+
+    public Movie(Integer id) {
+        this.id = id;
+        this.hasModified = true;
+        this.fsk = 0;
+        this.duration = 0;
+        this.numberOfOscars = 1;
+        this.startDate = "-";
     }
 
     public Movie(String csvLine) {
@@ -55,30 +65,11 @@ public class Movie{
         this.fsk = Integer.parseInt(splitted[9]);
         this.genre = splitted[10];
         this.startDate = splitted[11];
-
     }
 
     /**
      * API
      */
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        hasModified = true;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-        hasModified = true;
-    }
-
     public boolean isHasModified() {
         return hasModified;
     }
@@ -87,20 +78,30 @@ public class Movie{
         this.hasModified = hasModified;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.setHasModified((this.validateChange(title, this.title)) || this.hasModified);
+        this.title = title;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.setHasModified((this.validateChange(id, this.id)) || this.hasModified);
+        this.id = id;
+    }
+
     public String getYearOfAward() {
         return yearOfAward;
     }
 
-    private boolean validateChange(Integer newValue, Integer oldValue) {
-        return newValue != oldValue;
-    }
-
-    private boolean validateChange(String newValue, String oldValue) {
-        return newValue != oldValue;
-    }
-
     public void setYearOfAward(String yearOfAward) {
-        this.hasModified = (this.validateChange(yearOfAward, this.yearOfAward)) || this.hasModified;
+        this.setHasModified((this.validateChange(yearOfAward, this.yearOfAward)) || this.hasModified);
         this.yearOfAward = yearOfAward;
 
     }
@@ -110,7 +111,7 @@ public class Movie{
     }
 
     public void setDirector(String director) {
-        this.hasModified = (this.validateChange(director, this.director)) || this.hasModified;
+        this.setHasModified((this.validateChange(director, this.director)) || this.hasModified);
         this.director = director;
     }
 
@@ -119,7 +120,7 @@ public class Movie{
     }
 
     public void setMainActor(String mainActor) {
-        this.hasModified = (this.validateChange(mainActor, this.mainActor)) || this.hasModified;
+        this.setHasModified((this.validateChange(mainActor, this.mainActor)) || this.hasModified);
         this.mainActor = mainActor;
     }
 
@@ -128,7 +129,7 @@ public class Movie{
     }
 
     public void setTitleEnglish(String titleEnglish) {
-        this.hasModified = (this.validateChange(titleEnglish, this.titleEnglish)) || this.hasModified;
+        this.setHasModified((this.validateChange(titleEnglish, this.titleEnglish)) || this.hasModified);
         this.titleEnglish = titleEnglish;
     }
 
@@ -137,7 +138,7 @@ public class Movie{
     }
 
     public void setYearOfProduction(String yearOfProduction) {
-        this.hasModified = (this.validateChange(yearOfProduction, this.yearOfProduction)) || this.hasModified;
+        this.setHasModified((this.validateChange(yearOfProduction, this.yearOfProduction)) || this.hasModified);
         this.yearOfProduction = yearOfProduction;
     }
 
@@ -146,7 +147,7 @@ public class Movie{
     }
 
     public void setCountry(String country) {
-        this.hasModified = (this.validateChange(country, this.country)) || this.hasModified;
+        this.setHasModified((this.validateChange(country, this.country)) || this.hasModified);
         this.country = country;
     }
 
@@ -155,7 +156,7 @@ public class Movie{
     }
 
     public void setDuration(Integer duration) {
-        this.hasModified = (this.validateChange(duration, this.duration)) || this.hasModified;
+        this.setHasModified((this.validateChange(duration, this.duration)) || this.hasModified);
         this.duration = duration;
     }
 
@@ -164,7 +165,7 @@ public class Movie{
     }
 
     public void setFsk(Integer fsk) {
-        this.hasModified = (this.validateChange(fsk, this.fsk)) || this.hasModified;
+        this.setHasModified((this.validateChange(fsk, this.fsk)) || this.hasModified);
         this.fsk = fsk;
     }
 
@@ -173,7 +174,7 @@ public class Movie{
     }
 
     public void setGenre(String genre) {
-        this.hasModified = (this.validateChange(genre, this.genre)) || this.hasModified;
+        this.setHasModified((this.validateChange(genre, this.genre)) || this.hasModified);
         this.genre = genre;
     }
 
@@ -182,7 +183,7 @@ public class Movie{
     }
 
     public void setStartDate(String startDate) {
-        this.hasModified = (this.validateChange(startDate, this.startDate)) || this.hasModified;
+        this.setHasModified((this.validateChange(startDate, this.startDate)) || this.hasModified);
         this.startDate = startDate;
     }
 
@@ -191,7 +192,7 @@ public class Movie{
     }
 
     public void setNumberOfOscars(Integer numberOfOscars) {
-        this.hasModified = (this.validateChange(numberOfOscars, this.numberOfOscars)) || this.hasModified;
+        this.setHasModified((this.validateChange(numberOfOscars, this.numberOfOscars)) || this.hasModified);
         this.numberOfOscars = numberOfOscars < 1 ? 1 : numberOfOscars;
     }
 
@@ -203,6 +204,13 @@ public class Movie{
         return this.poster;
     }
 
+//    private boolean validateChange(Integer newValue, Integer oldValue) {
+//        return !newValue.equals(oldValue);
+//    }
+
+    private boolean validateChange(Object newValue, Object oldValue) {
+        return !newValue.equals(oldValue);
+    }
 
     @Override
     public String toString(){
