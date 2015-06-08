@@ -4,23 +4,10 @@ import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 import ch.fhnw.oop.Movie;
 import net.miginfocom.swing.MigLayout;
-import sun.jvm.hotspot.types.JIntField;
-
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.List;
-
-import static javax.swing.SwingConstants.CENTER;
-
 
 public class DetailView extends JPanel {
 
@@ -266,14 +253,9 @@ public class DetailView extends JPanel {
             }
         });
 
-
-        sp_OscarsModel.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                controller.setNumberOfOscarsAtSelectedMovie((int)sp_OscarsModel.getValue());
-            }
-        });
-
+        sp_OscarsModel.addChangeListener(e -> controller.onChangeNumberOfOscars((int) sp_OscarsModel.getValue()));
+        sp_DurationModel.addChangeListener(e -> controller.onChangeDuration((int) sp_DurationModel.getValue()));
+        sp_FskModel.addChangeListener(e -> controller.onChangeFsk((int) sp_FskModel.getValue()));
 
         sp_CountryText.addKeyListener(new KeyAdapter() {
             @Override
@@ -282,6 +264,33 @@ public class DetailView extends JPanel {
             }
         });
 
+        sp_GenreText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.onChangeGenre(sp_GenreText.getText());
+            }
+        });
+
+        sp_ReleaseDateText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.onChangeStartDate(sp_ReleaseDateText.getText());
+            }
+        });
+
+        sp_TitleEngText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.onChangeTitleEnglish(sp_TitleEngText.getText());
+            }
+        });
+
+        sp_ProductionYearText.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                controller.onChangeYearOfProduction(sp_ProductionYearText.getText());
+            }
+        });
 
     }
 
@@ -289,16 +298,15 @@ public class DetailView extends JPanel {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
             showData();
-
         });
     }
 
-    public ImageIcon getPoster(){
+    public ImageIcon getPoster() {
         String targetPoster = PATH_POSTERS + model.getSelectedMovieId() + ".jpg";
         ImageIcon poster;
-        if(getClass().getResource(targetPoster) != null){
+        if (getClass().getResource(targetPoster) != null) {
             poster = new ImageIcon(getClass().getResource(targetPoster).getFile());
-        }else{
+        } else {
             poster = new ImageIcon(getClass().getResource(IMAGE_NO_POSTERS));
         }
         return poster;
@@ -353,15 +361,15 @@ public class DetailView extends JPanel {
         pp_flag.removeAll();
         String country = movie.getCountry();
 
-        if(country != null){
+        if (country != null) {
             country = country.toLowerCase();
             country = country.trim();
 
             String[] countries = country.split("/");
-            for (int i=0; i<countries.length; i++){
+            for (int i = 0; i < countries.length; i++) {
                 String targetFlag = PATH_FLAGS + countries[i].trim() + ".png";
                 JLabel flagLabel = new JLabel();
-                if(getClass().getResource(targetFlag) != null){
+                if (getClass().getResource(targetFlag) != null) {
                     ImageIcon flag = new ImageIcon(getClass().getResource(targetFlag).getFile());
                     flagLabel.setIcon(flag);
                 }

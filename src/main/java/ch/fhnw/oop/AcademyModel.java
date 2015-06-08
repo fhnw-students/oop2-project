@@ -3,10 +3,7 @@ package ch.fhnw.oop;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AcademyModel implements Observable {
 
@@ -161,7 +158,9 @@ public class AcademyModel implements Observable {
     }
 
     public void add(Movie movie) {
-        movie.setId(list.size());
+        final Comparator<Movie> comp = (p1, p2) -> Integer.compare( p1.getId(), p2.getId());
+        int maxId = list.stream().max(comp).get().getId();
+        movie.setId(maxId + 1);
         list.add(movie);
         setSelectedMovieId(movie.getId());
     }
