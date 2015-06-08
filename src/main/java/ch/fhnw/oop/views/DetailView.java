@@ -106,13 +106,15 @@ public class DetailView extends JPanel {
         ));
         panel.setBackground(Color.white);
 
-        pp_poster = new JLabel();
-        panel.add(pp_poster, "dock east");
-
         pp_oscars = new JPanel();
         pp_oscars.setLayout(new MigLayout());
         pp_oscars.setBackground(Color.white);
         panel.add(pp_oscars, "dock south");
+
+        pp_poster = new JLabel();
+        panel.add(pp_poster, "dock east");
+
+
 
         pp_year = new JLabel("");
         pp_year.setFont(new Font("", Font.BOLD, 20));
@@ -218,7 +220,7 @@ public class DetailView extends JPanel {
 
         sp_Oscars = new JLabel("Oscars:");
         panel.add(sp_Oscars, "width :100:");
-        sp_OscarsModel = new SpinnerNumberModel(1, 1, 30, 1);
+        sp_OscarsModel = new SpinnerNumberModel(1, 1, 20, 1);
         sp_OscarsText = new JSpinner(sp_OscarsModel);
         panel.add(sp_OscarsText, "growx, sg");
 
