@@ -24,8 +24,8 @@ public class DetailView extends JPanel {
     private JTextArea pp_title;
     private JLabel pp_von;
     private JLabel pp_mit;
-    private JLabel pp_director;
-    private JLabel pp_actors;
+    private JTextArea pp_director;
+    private JTextArea pp_actors;
     private JPanel pp_flag;
     private JPanel pp_oscars;
     private JLabel pp_poster;
@@ -115,7 +115,6 @@ public class DetailView extends JPanel {
         panel.add(pp_poster, "dock east");
 
 
-
         pp_year = new JLabel("");
         pp_year.setFont(new Font("", Font.BOLD, 20));
         panel.add(pp_year, "");
@@ -126,10 +125,8 @@ public class DetailView extends JPanel {
         panel.add(pp_flag, "wrap,right");
 
         pp_title = new JTextArea("");
-        pp_title.setSize(300,300);
-
-        //set new Line automatically 
-        pp_title.setLineWrap(true);
+        pp_title.setSize(300, 300);
+        pp_title.setLineWrap(true); //set new Line automatically
         pp_title.setWrapStyleWord(true);
 
         pp_title.setFont(new Font("", Font.BOLD, 25));
@@ -139,17 +136,25 @@ public class DetailView extends JPanel {
         pp_von.setFont(new Font("", Font.BOLD, 18));
         panel.add(pp_von);
 
-        pp_director = new JLabel("");
-        pp_director.setFont(new Font("",Font.LAYOUT_RIGHT_TO_LEFT,18));
+        pp_director = new JTextArea("");
+        pp_director.setSize(100, 100);
+        pp_director.setLineWrap(true); //set new Line automatically
+        pp_director.setWrapStyleWord(true);
+        pp_director.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT, 18));
         panel.add(pp_director, "wrap");
+
 
         pp_mit = new JLabel("mit");
         pp_mit.setFont(new Font("", Font.BOLD, 18));
         panel.add(pp_mit);
 
-        pp_actors = new JLabel("");
-        pp_actors.setFont(new Font("",Font.LAYOUT_RIGHT_TO_LEFT,18));
+        pp_actors = new JTextArea("");
+        pp_actors.setSize(100, 100);
+        pp_title.setLineWrap(true); //set new Line automatically
+        pp_title.setWrapStyleWord(true);
+        pp_actors.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT,18));
         panel.add(pp_actors, "wrap");
+
 
         return panel;
     }
