@@ -55,10 +55,16 @@ public class AcademyView extends JFrame {
         table.getColumnModel().getColumn(0).setMaxWidth(25);
         table.getColumnModel().getColumn(1).setMaxWidth(50);
 
+
         tableScrollPane = new JScrollPane(table);
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, tableScrollPane, detail);
         splitPane.setDividerLocation(700);
+
+        //set minimum Size of the Components
+        Dimension minimumSize = new Dimension(500, 500);
+        tableScrollPane.setMinimumSize(minimumSize);
+        detail.setMinimumSize(minimumSize);
 
     }
 
