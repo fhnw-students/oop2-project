@@ -8,12 +8,10 @@ import java.util.stream.Collectors;
  */
 public class FuzzySearch {
 
-    private AcademyModel academyModel;
     private List<FuzzySearchItem> fuzzySearchItems;
 
     FuzzySearch(AcademyModel academyModel){
-        this.academyModel = academyModel;
-        this.fuzzySearchItems = this.academyModel.getList().stream().map(movie -> new FuzzySearchItem(movie)).collect(Collectors.toList());
+        this.fuzzySearchItems = academyModel.getList().stream().map(FuzzySearchItem::new).collect(Collectors.toList());
     }
 
     public List<Movie> filter(String searchValue) {
@@ -27,14 +25,12 @@ public class FuzzySearch {
             );
         }
 
-        Integer max = fuzzySearchItems.stream().map(value -> value.getDistance()).max(Integer::compare).get();
+        Integer max = fuzzySearchItems.stream().map(FuzzySearchItem::getDistance).max(Integer::compare).get();
 
-        List<Movie> list = fuzzySearchItems.stream()
+        return fuzzySearchItems.stream()
                 .filter(fuzzySearchItem -> fuzzySearchItem.getDistance().equals(max))
                 .map(FuzzySearchItem::getMovie)
                 .collect(Collectors.toList());
-
-        return list;
     }
 
     public static int LevenshteinDistance(String s0, String s1) {

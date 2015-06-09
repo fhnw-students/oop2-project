@@ -1,16 +1,8 @@
 package ch.fhnw.oop;
 
-
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 public class AcademyController {
     private final AcademyModel model;
     private final AcademyView view;
-
-    private final Deque<ICommand> undoStack = new ArrayDeque<>();
-    private final Deque<ICommand> redoStack = new ArrayDeque<>();
-
 
     public AcademyController(AcademyModel model) {
         this.model = model;
@@ -20,12 +12,6 @@ public class AcademyController {
     public void setValueAtSelectedRow(String value, int col) {
         model.setValueAt(value, model.getSelectedMovieId(), col);
     }
-
-    private void setUndoRedoStatus() {
-        model.setRedoAvailable(!redoStack.isEmpty());
-        model.setUndoAvailable(!undoStack.isEmpty());
-    }
-
 
     public void addNewMovie() {
         Movie movie = new Movie();
@@ -91,9 +77,15 @@ public class AcademyController {
     public void onChangeSearch(String value) {
         this.model.setSearchValue(value);
     }
+}
 
     /////////////////////////////////
-
+//    private final Deque<ICommand> undoStack = new ArrayDeque<>();
+//    private final Deque<ICommand> redoStack = new ArrayDeque<>();
+//    private void setUndoRedoStatus() {
+//        model.setRedoAvailable(!redoStack.isEmpty());
+//        model.setUndoAvailable(!undoStack.isEmpty());
+//    }
 //    public void undo() {
 //        if (undoStack.isEmpty()) {
 //            return;
@@ -122,5 +114,3 @@ public class AcademyController {
 //        setUndoRedoStatus();
 //        cmd.execute();
 //    }
-
-}

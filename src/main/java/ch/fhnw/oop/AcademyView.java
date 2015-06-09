@@ -1,22 +1,17 @@
 package ch.fhnw.oop;
 
+import ch.fhnw.oop.views.DetailView;
+import ch.fhnw.oop.views.TableView;
+import ch.fhnw.oop.views.ToolbarView;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-import ch.fhnw.oop.views.*;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class AcademyView extends JFrame {
-    private JTable table;
-    private JScrollPane tableScrollPane;
-    private JPanel detail;
     private JToolBar toolbar;
     private JSplitPane splitPane;
-
-
     private final AcademyModel model;
     private final AcademyController controller;
 
@@ -24,7 +19,6 @@ public class AcademyView extends JFrame {
         super("Academy App");
         this.model = model;
         this.controller = controller;
-
     }
 
     public void createAndShow() {
@@ -37,8 +31,6 @@ public class AcademyView extends JFrame {
         // Add Header Toolbar
         contents.add(toolbar, BorderLayout.PAGE_START);
         contents.add(splitPane, BorderLayout.CENTER);
-
-
         add(contents);
 
         pack();
@@ -48,27 +40,21 @@ public class AcademyView extends JFrame {
 
     private void initializeComponents() {
         toolbar = new ToolbarView(this.model, this.controller);
-        detail = new DetailView(this.model, this.controller);
-
-        table = new TableView(this.model, this.controller);
+        JPanel detailPanel = new DetailView(this.model, this.controller);
+        JTable table = new TableView(this.model, this.controller);
 
         table.getColumnModel().getColumn(0).setResizable(false);
         table.getColumnModel().getColumn(1).setResizable(false);
         table.getColumnModel().getColumn(0).setMaxWidth(25);
         table.getColumnModel().getColumn(1).setMaxWidth(50);
-
-
-        tableScrollPane = new JScrollPane(table);
-
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, tableScrollPane, detail);
+        JScrollPane tableScrollPane = new JScrollPane(table);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, tableScrollPane, detailPanel);
         splitPane.setDividerLocation(700);
-
 
         //set minimum Size of the Components
         Dimension minimumSize = new Dimension(500, 500);
         tableScrollPane.setMinimumSize(minimumSize);
-        detail.setMinimumSize(minimumSize);
-
+        detailPanel.setMinimumSize(minimumSize);
     }
 
     private JPanel layoutComponents() {
@@ -96,12 +82,9 @@ public class AcademyView extends JFrame {
             }
         });
 
-
-        model.addObserver(m -> {
-            AcademyModel counterModel = (AcademyModel) m;
-
-
-        });
+//        model.addObserver(m -> {
+//            AcademyModel counterModel = (AcademyModel) m;
+//        });
     }
 
 }

@@ -314,10 +314,10 @@ public class DetailView extends JPanel {
         });
     }
 
-    public void validateTextField(boolean ok, JTextField field ){
-        if(ok){
+    public void validateTextField(boolean ok, JTextField field) {
+        if (ok) {
             setTextFieldStyle(field, VALID_BACKGROUND, VALID_COLOR);
-        }else{
+        } else {
             setTextFieldStyle(field, INVALID_BACKGROUND, INVALID_COLOR);
         }
     }

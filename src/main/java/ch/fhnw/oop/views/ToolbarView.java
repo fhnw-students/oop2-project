@@ -19,13 +19,13 @@ public class ToolbarView extends JToolBar {
     private final AcademyModel model;
     private final AcademyController controller;
 
-    private JButton btnSave;
-    private JButton btnAdd;
-    private JButton btnRemove;
-    private JButton btnUndo;
-    private JButton btnRedo;
-    private JToolBar buttons;
-    private JTextField searchField;
+    private JButton saveButton;
+    private JButton addButton;
+    private JButton removeButton;
+    private JButton undoButton;
+    private JButton redoButton;
+    private JToolBar buttonsToolbar;
+    private JTextField searchTextField;
 
     public ToolbarView(AcademyModel model, AcademyController controller) {
         this.model = model;
@@ -45,46 +45,46 @@ public class ToolbarView extends JToolBar {
         this.setVisible(true);
 
         // Buttons
-        buttons.setFloatable(false);
-        buttons.setRollover(true);
-        buttons.setBackground(Color.darkGray);
-        buttons.setVisible(true);
+        buttonsToolbar.setFloatable(false);
+        buttonsToolbar.setRollover(true);
+        buttonsToolbar.setBackground(Color.darkGray);
+        buttonsToolbar.setVisible(true);
 
-        buttons.add(btnSave);
-        buttons.addSeparator();
-        buttons.add(btnAdd);
-        buttons.add(btnRemove);
-        buttons.addSeparator();
-        buttons.add(btnUndo);
-        buttons.add(btnRedo);
-        this.add(buttons, BorderLayout.WEST);
+        buttonsToolbar.add(saveButton);
+        buttonsToolbar.addSeparator();
+        buttonsToolbar.add(addButton);
+        buttonsToolbar.add(removeButton);
+        buttonsToolbar.addSeparator();
+        buttonsToolbar.add(undoButton);
+        buttonsToolbar.add(redoButton);
+        this.add(buttonsToolbar, BorderLayout.WEST);
 
         // Search field
-        this.add(searchField, BorderLayout.EAST);
+        this.add(searchTextField, BorderLayout.EAST);
 
     }
 
 
     private void initializeComponents() {
-        btnSave = makeNavigationButton("Save", "save", "Save changes", "Save");
-        btnAdd = makeNavigationButton("Plus", "add", "Add changes", "Add");
-        btnRemove = makeNavigationButton("Minus", "remove", "Remove changes", "Remove");
-        btnUndo = makeNavigationButton("Undo", "undo", "Undo changes", "Undo");
-        btnRedo = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
-        buttons = new JToolBar();
-        searchField = new JTextField(30);
+        saveButton = makeNavigationButton("Save", "save", "Save changes", "Save");
+        addButton = makeNavigationButton("Plus", "add", "Add changes", "Add");
+        removeButton = makeNavigationButton("Minus", "remove", "Remove changes", "Remove");
+        undoButton = makeNavigationButton("Undo", "undo", "Undo changes", "Undo");
+        redoButton = makeNavigationButton("Redo", "redo", "Redo changes", "Redo");
+        buttonsToolbar = new JToolBar();
+        searchTextField = new JTextField(30);
 
-        btnSave.setEnabled(false);
-        btnRedo.setEnabled(false);
-        btnUndo.setEnabled(false);
+        saveButton.setEnabled(false);
+        redoButton.setEnabled(false);
+        undoButton.setEnabled(false);
     }
 
     private void addEvents() {
-        btnAdd.addActionListener(e -> controller.addNewMovie());
-        btnSave.addActionListener(e -> controller.save());
-        btnRemove.addActionListener(e -> controller.removeMovie());
+        addButton.addActionListener(e -> controller.addNewMovie());
+        saveButton.addActionListener(e -> controller.save());
+        removeButton.addActionListener(e -> controller.removeMovie());
 
-        searchField.addKeyListener(new KeyListener() {
+        searchTextField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -97,16 +97,14 @@ public class ToolbarView extends JToolBar {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeSearch(searchField.getText());
+                controller.onChangeSearch(searchTextField.getText());
             }
         });
 
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
 
-            btnSave.setEnabled(
-                    academyModel.hasModelBeenChanged() && academyModel.editorIsValid()
-            );
+            saveButton.setEnabled(academyModel.hasModelBeenChanged() && academyModel.editorIsValid());
 
         });
     }

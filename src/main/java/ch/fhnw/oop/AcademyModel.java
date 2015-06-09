@@ -28,23 +28,18 @@ public class AcademyModel implements Observable {
     private List<Movie> list = new ArrayList<>();
     private List<Movie> filterdList = new ArrayList<>();
     private String searchValue = "";
-    private FuzzySearch fuzzySearch;
 
     public AcademyModel() throws IOException, URISyntaxException {
         filterdList = list = readCSVFile(AcademyModel.class.getResource(FILE_PATH).toURI());
         selectedMovieId = list.get(0).getId();
     }
 
-    public List<Movie> getList(){
+    public List<Movie> getList() {
         return this.list;
     }
 
     public List<Movie> getFilteredList() {
         return filterdList;
-    }
-
-    public Movie getRow(int index) {
-        return filterdList.get(index);
     }
 
     public String getValueAt(int index, int col) {
@@ -97,11 +92,8 @@ public class AcademyModel implements Observable {
                 csvData.add(new Movie(line));
             }
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-
         } catch (IOException e) {
-
+            e.printStackTrace();
 
         } finally {
             if (stream != null)
@@ -125,35 +117,6 @@ public class AcademyModel implements Observable {
 
     public void notifyObservers() {
         observers.forEach(observer -> observer.update(this));
-    }
-
-    public void notifyObservers(String action) {
-        observerAction = action;
-        observers.forEach(observer -> observer.update(this));
-    }
-
-    public boolean isUndoAvailable() {
-        return isUndoAvailable;
-    }
-
-    public void setUndoAvailable(boolean undoAvailable) {
-        if (isUndoAvailable == undoAvailable) {
-            return;
-        }
-        isUndoAvailable = undoAvailable;
-        notifyObservers();
-    }
-
-    public boolean isRedoAvailable() {
-        return isRedoAvailable;
-    }
-
-    public void setRedoAvailable(boolean redoAvailable) {
-        if (isRedoAvailable == redoAvailable) {
-            return;
-        }
-        isRedoAvailable = redoAvailable;
-        notifyObservers();
     }
 
     public int getSelectedMovieId() {
@@ -335,12 +298,12 @@ public class AcademyModel implements Observable {
     public void setSearchValue(String searchValue) {
         if (searchValue.length() > 2) {
             this.searchValue = searchValue;
-            this.fuzzySearch = new FuzzySearch(this);
+            FuzzySearch fuzzySearch = new FuzzySearch(this);
             this.filterdList = fuzzySearch.filter(searchValue);
             this.setSelectedMovieId(this.filterdList.get(0).getId());
         } else {
             this.searchValue = "";
-            this.filterdList =  this.list;
+            this.filterdList = this.list;
         }
 
         this.observerAction = ACTION_SEARCH;
@@ -351,42 +314,66 @@ public class AcademyModel implements Observable {
     public boolean editorIsValid() {
         Movie movie = getMovieById(getSelectedMovieId());
 
-        if(!MovieValidator.isValidYear(movie.getYearOfAward())){
+        if (!MovieValidator.isValidYear(movie.getYearOfAward())) {
             return false;
         }
 
-        if(!MovieValidator.isRequired(movie.getTitle())){
+        if (!MovieValidator.isRequired(movie.getTitle())) {
             return false;
         }
 
-        if(!MovieValidator.isRequired(movie.getDirector())){
+        if (!MovieValidator.isRequired(movie.getDirector())) {
             return false;
         }
 
-        if(!MovieValidator.isRequired(movie.getMainActor())){
+        if (!MovieValidator.isRequired(movie.getMainActor())) {
             return false;
         }
 
-        if(!MovieValidator.isDate(movie.getStartDate())){
+        if (!MovieValidator.isDate(movie.getStartDate())) {
             return false;
         }
 
-        if(!MovieValidator.isFlag(movie.getCountry())){
+        if (!MovieValidator.isFlag(movie.getCountry())) {
             return false;
         }
 
-        if(!MovieValidator.isNumber(movie.getFsk().toString())){
+        if (!MovieValidator.isNumber(movie.getFsk().toString())) {
             return false;
         }
 
-        if(!MovieValidator.isNumber(movie.getDuration().toString())){
+        if (!MovieValidator.isNumber(movie.getDuration().toString())) {
             return false;
         }
 
-        if(!MovieValidator.isNumber(movie.getNumberOfOscars().toString()) || movie.getNumberOfOscars()<1){
+        if (!MovieValidator.isNumber(movie.getNumberOfOscars().toString()) || movie.getNumberOfOscars() < 1) {
             return false;
         }
 
         return true;
     }
+
 }
+    //    public boolean isUndoAvailable() {
+//        return isUndoAvailable;
+//    }
+
+//    public void setUndoAvailable(boolean undoAvailable) {
+//        if (isUndoAvailable == undoAvailable) {
+//            return;
+//        }
+//        isUndoAvailable = undoAvailable;
+//        notifyObservers();
+//    }
+
+//    public boolean isRedoAvailable() {
+//        return isRedoAvailable;
+//    }
+
+//    public void setRedoAvailable(boolean redoAvailable) {
+//        if (isRedoAvailable == redoAvailable) {
+//            return;
+//        }
+//        isRedoAvailable = redoAvailable;
+//        notifyObservers();
+//    }

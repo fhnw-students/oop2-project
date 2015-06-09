@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.net.URL;
 
-
 public class TableView extends JTable {
 
 
@@ -20,9 +19,8 @@ public class TableView extends JTable {
     public TableView(AcademyModel model, AcademyController controller) {
         this.model = model;
         this.controller = controller;
-        tableModel = new TableModel(model);
+        this.tableModel = new TableModel(model);
         setModel(tableModel);
-
         addEvents();
         addObservers();
     }
@@ -36,14 +34,13 @@ public class TableView extends JTable {
                 refreshTable(model.getFilteredList().size());
             }
         });
-
     }
 
-    public void refreshSelectedMovie(int index){
+    public void refreshSelectedMovie(int index) {
         tableModel.fireTableRowsUpdated(index, index);
     }
 
-    public void refreshTable(int index){
+    public void refreshTable(int index) {
         tableModel.fireTableRowsUpdated(0, index);
     }
 
@@ -51,7 +48,7 @@ public class TableView extends JTable {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
 
-            switch (academyModel.observerAction){
+            switch (academyModel.observerAction) {
                 case AcademyModel.ACTION_INSERT:
                     tableModel.fireTableRowsInserted(academyModel.observerIndex, academyModel.observerIndex);
                     break;
@@ -61,13 +58,11 @@ public class TableView extends JTable {
                     break;
 
                 case AcademyModel.ACTION_PRISTINE:
-                    refreshTable(academyModel.getFilteredList().size()-1);
+                    refreshTable(academyModel.getFilteredList().size() - 1);
                     break;
 
                 case AcademyModel.ACTION_SEARCH:
-                    refreshTable(academyModel.getList().size()-1);
-//                    tableModel.fireTableDataChanged();
-
+                    refreshTable(academyModel.getList().size() - 1);
                     break;
             }
 
@@ -121,23 +116,18 @@ public class TableView extends JTable {
             Object value = model.getValueAt(row, col);
 
             if (col == 0) {
-
                 String path = TableModel.MARK_EMPTY;
                 Movie movie = model.getMovieByIndex(row);
-                if(movie.getId().equals(model.getSelectedMovieId())){
+                if (movie.getId().equals(model.getSelectedMovieId())) {
                     path = TableModel.MARK_BLUE;
-                }else if(movie.isHasModified()){
+                } else if (movie.isHasModified()) {
                     path = TableModel.MARK_ORANGE;
                 }
-
                 URL imageURL = TableView.class.getResource(path);
-                ImageIcon imageIcon = new ImageIcon(imageURL);
-                return imageIcon;
+                return new ImageIcon(imageURL);
             }
 
             return value;
-
-
         }
 
         public Class getColumnClass(int c) {
@@ -151,11 +141,7 @@ public class TableView extends JTable {
         public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
             //no matter where the cell appears onscreen.
-            if (col < 2) {
-                return false;
-            } else {
-                return true;
-            }
+            return col >= 2;
         }
 
         /*
