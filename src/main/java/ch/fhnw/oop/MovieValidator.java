@@ -2,16 +2,16 @@ package ch.fhnw.oop;
 
 public class MovieValidator {
 
-    public static boolean isValidYear(String value){
-        return value.matches("\\d+") && value.length() == 4;
+    public static boolean isValidYear(String value) {
+        return value == null || value.matches("\\d+") && value.length() == 4;
     }
 
     public static boolean isRequired(String value){
-       return value.length() > 0;
+       return value != null && value.length() > 0;
     }
 
     public static boolean isNumber(String value){
-        return value.matches("\\d+");
+        return value == null || value.matches("\\d+");
     }
 
     public static boolean isFlag(String value) {
@@ -26,7 +26,7 @@ public class MovieValidator {
         return ok;
     }
     public static boolean isDate(String value){
-        return value.matches("-") || value.matches("[0-9]{2}.[0-9]{2}.[0-9]{4}");
+        return value == null || value.matches("-") || value.matches("[0-9]{2}.[0-9]{2}.[0-9]{4}");
     }
 
 }

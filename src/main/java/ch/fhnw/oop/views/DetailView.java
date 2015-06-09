@@ -76,10 +76,6 @@ public class DetailView extends JPanel {
         this.showData();
     }
 
-    /**
-     * @return JPanel
-     * @description View with the images, flags...
-     */
     private JPanel initializePreviewPanel() {
         JPanel previewPanel = new JPanel();
         previewPanel.setLayout(new MigLayout(
@@ -140,11 +136,6 @@ public class DetailView extends JPanel {
         return previewPanel;
     }
 
-
-    /**
-     * @return JPanel
-     * @description View with formular...
-     */
     private JPanel initializeEditorPanel() {
         JPanel editorPanel = new JPanel();
         editorPanel.setBackground(Color.LIGHT_GRAY);
@@ -306,6 +297,7 @@ public class DetailView extends JPanel {
             Movie movie = academyModel.getMovieById(academyModel.getSelectedMovieId());
 
             validateTextField(MovieValidator.isValidYear(movie.getYearOfAward()), editorYearOfAwardTextField);
+            validateTextField(MovieValidator.isRequired(movie.getYearOfAward()), editorYearOfAwardTextField);
             validateTextField(MovieValidator.isRequired(movie.getTitle()), editorTitleTextField);
             validateTextField(MovieValidator.isRequired(movie.getDirector()), editorDirectorTextField);
             validateTextField(MovieValidator.isRequired(movie.getMainActor()), editorMainActorsTextField);
