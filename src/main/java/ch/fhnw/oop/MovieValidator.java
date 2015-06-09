@@ -1,12 +1,5 @@
 package ch.fhnw.oop;
 
-import java.awt.*;
-import java.text.DateFormat;
-import java.util.Date;
-
-/**
- * Created by davidheimgartner on 08.06.15.
- */
 public class MovieValidator {
 
     public static boolean isValidYear(String value){

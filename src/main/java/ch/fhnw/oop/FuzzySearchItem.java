@@ -10,11 +10,6 @@ public class FuzzySearchItem {
     private Integer distance;
 
     // Constructors
-    FuzzySearchItem(Movie movie, Integer distance) {
-        this.movie = movie;
-        this.distance = distance;
-    }
-
     FuzzySearchItem(Movie movie) {
         this.movie = movie;
         this.distance = null;
@@ -31,9 +26,5 @@ public class FuzzySearchItem {
 
     public Movie getMovie() {
         return movie;
-    }
-
-    public void setMovie(Movie movie) {
-        this.movie = movie;
     }
 }

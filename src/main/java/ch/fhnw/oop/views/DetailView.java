@@ -4,13 +4,12 @@ import ch.fhnw.oop.AcademyController;
 import ch.fhnw.oop.AcademyModel;
 import ch.fhnw.oop.Movie;
 import ch.fhnw.oop.MovieValidator;
-import com.sun.prism.paint.*;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.Color;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class DetailView extends JPanel {
 
@@ -18,50 +17,36 @@ public class DetailView extends JPanel {
     public static String IMAGE_NO_POSTERS = "../resources/poster/no_poster.gif";
     public static String PATH_FLAGS = "../resources/flags_iso/24/";
 
+    public static Color VALID_BACKGROUND = new Color(255, 255, 255);
+    public static Color INVALID_BACKGROUND = new Color(132, 76, 76);
+    public static Color VALID_COLOR = new Color(0, 0, 0);
+    public static Color INVALID_COLOR = new Color(220, 220, 220);
+
     private final AcademyModel model;
     private final AcademyController controller;
 
+    // Attributes of preview panel
+    private JLabel previewYearOfAwardLabel;
+    private JTextArea previewTitleTextArea;
+    private JTextArea previewDirectorTextArea;
+    private JTextArea previewMainActorTextArea;
+    private JPanel previewCountryFlagsPanel;
+    private JPanel previewNumberOfOscarsPanel;
+    private JLabel previewPosterLabel;
 
-    // Attributes of preview_panel
-    private JLabel pp_year;
-    private JTextArea pp_title;
-    private JLabel pp_von;
-    private JLabel pp_mit;
-    private JTextArea pp_director;
-    private JTextArea pp_actors;
-    private JPanel pp_flag;
-    private JPanel pp_oscars;
-    private JLabel pp_poster;
-
-    // Attributes of show_panel
-    private JLabel sp_Year;
-    private JTextField sp_YearText;
-    private JLabel sp_Title;
-    private JTextField sp_TitleText;
-    private JLabel sp_director;
-    private JTextField sp_directorText;
-    private JLabel sp_Actor;
-    private JTextField sp_ActorText;
-    private JLabel sp_TitleEng;
-    private JTextField sp_TitleEngText;
-    private JLabel sp_Genre;
-    private JTextField sp_GenreText;
-    private JLabel sp_ProductionYear;
-    private JTextField sp_ProductionYearText;
-    private JLabel sp_Country;
-    private JTextField sp_CountryText;
-    private JLabel sp_ReleaseDate;
-    private JTextField sp_ReleaseDateText;
-
-    private JLabel sp_Fsk;
-    private SpinnerModel sp_FskModel;
-    private JSpinner sp_FskText;
-    private JLabel sp_Duration;
-    private SpinnerModel sp_DurationModel;
-    private JSpinner sp_DurationText;
-    private JLabel sp_Oscars;
-    private SpinnerModel sp_OscarsModel;
-    private JSpinner sp_OscarsText;
+    // Attributes of editor panel
+    private JTextField editorYearOfAwardTextField;
+    private JTextField editorTitleTextField;
+    private JTextField editorDirectorTextField;
+    private JTextField editorMainActorsTextField;
+    private JTextField editorTitleEnglishTextField;
+    private JTextField editorGenreTextField;
+    private JTextField editorProductionYearTextField;
+    private JTextField editorCountryTextField;
+    private JTextField editorReleaseDateTextField;
+    private SpinnerModel editorFskSpinnerModel;
+    private SpinnerModel editorDurationSpinnerModel;
+    private SpinnerModel editorNumberOfOscarsSpinnerModel;
 
 
     /**
@@ -71,10 +56,8 @@ public class DetailView extends JPanel {
         this.model = model;
         this.controller = controller;
         this.createAndShow();
-
         this.setBackground(Color.black);
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
     }
 
     /**
@@ -84,16 +67,13 @@ public class DetailView extends JPanel {
     public void createAndShow() {
         this.setLayout(new BorderLayout());
         JPanel preview = initializePreviewPanel();
-        JPanel form = initializeFormPanel();
-        addEvents();
-        addObservers();
-
-
+        JPanel editor = initializeEditorPanel();
+        this.addEvents();
+        this.addObservers();
         this.add(preview, BorderLayout.NORTH);
-        this.add(form, BorderLayout.CENTER);
-
+        this.add(editor, BorderLayout.CENTER);
         this.setVisible(true);
-        showData();
+        this.showData();
     }
 
     /**
@@ -101,69 +81,63 @@ public class DetailView extends JPanel {
      * @description View with the images, flags...
      */
     private JPanel initializePreviewPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new MigLayout(
+        JPanel previewPanel = new JPanel();
+        previewPanel.setLayout(new MigLayout(
                 "fillx,gap 10!", //--> Layout Constraints
                 "10[][grow][]", //--> Column Constraints
                 "10[shrink 0]10[shrink 0]10[shrink 0]10[shrink 0]10[shrink 0]"//--> Row Constraints
         ));
-        panel.setBackground(Color.white);
+        previewPanel.setBackground(Color.white);
 
-        pp_oscars = new JPanel();
-        pp_oscars.setLayout(new MigLayout());
-        pp_oscars.setBackground(Color.white);
-        panel.add(pp_oscars, "dock south");
+        previewNumberOfOscarsPanel = new JPanel();
+        previewNumberOfOscarsPanel.setLayout(new MigLayout());
+        previewNumberOfOscarsPanel.setBackground(Color.white);
+        previewPanel.add(previewNumberOfOscarsPanel, "dock south");
 
-        pp_poster = new JLabel();
-        panel.add(pp_poster, "growx,dock east");
+        previewPosterLabel = new JLabel();
+        previewPanel.add(previewPosterLabel, "growx,dock east");
 
+        previewYearOfAwardLabel = new JLabel("");
+        previewYearOfAwardLabel.setFont(new Font("", Font.BOLD, 20));
+        previewPanel.add(previewYearOfAwardLabel, "");
 
+        previewCountryFlagsPanel = new JPanel();
+        previewCountryFlagsPanel.setLayout(new MigLayout());
+        previewCountryFlagsPanel.setBackground(Color.white);
+        previewPanel.add(previewCountryFlagsPanel, "wrap,right");
 
-        pp_year = new JLabel("");
-        pp_year.setFont(new Font("", Font.BOLD, 20));
-        panel.add(pp_year, "");
+        previewTitleTextArea = new JTextArea("");
+        previewTitleTextArea.setSize(300, 300);
+        previewTitleTextArea.getLineWrap();
+        previewTitleTextArea.setLineWrap(true); //set new Line if title length > Text Area Size
+        previewTitleTextArea.setWrapStyleWord(true);
 
-        pp_flag = new JPanel();
-        pp_flag.setLayout(new MigLayout());
-        pp_flag.setBackground(Color.white);
-        panel.add(pp_flag, "wrap,right");
+        previewTitleTextArea.setFont(new Font("", Font.BOLD, 25));
+        previewPanel.add(previewTitleTextArea, "span 3,wrap");
 
-        pp_title = new JTextArea("");
-        pp_title.setSize(300, 300);
-        pp_title.getLineWrap();
-        pp_title.setLineWrap(true); //set new Line if title length > Text Area Size
-        pp_title.setWrapStyleWord(true);
+        JLabel previewFromLabel = new JLabel("von");
+        previewFromLabel.setFont(new Font("", Font.BOLD, 18));
+        previewPanel.add(previewFromLabel);
 
+        previewDirectorTextArea = new JTextArea("");
+        previewDirectorTextArea.setSize(200, 200);
+        previewDirectorTextArea.getLineWrap();
+        previewDirectorTextArea.setWrapStyleWord(true);
+        previewDirectorTextArea.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT, 18));
+        previewPanel.add(previewDirectorTextArea, "wrap");
 
-        pp_title.setFont(new Font("", Font.BOLD, 25));
-        panel.add(pp_title, "span 3,wrap");
+        JLabel previewWithLabel = new JLabel("mit");
+        previewWithLabel.setFont(new Font("", Font.BOLD, 18));
+        previewPanel.add(previewWithLabel);
 
-        pp_von = new JLabel("von");
-        pp_von.setFont(new Font("", Font.BOLD, 18));
-        panel.add(pp_von);
+        previewMainActorTextArea = new JTextArea("");
+        previewMainActorTextArea.setSize(200, 200);
+        previewMainActorTextArea.setLineWrap(true); //set new Line automatically
+        previewMainActorTextArea.setWrapStyleWord(true);
+        previewMainActorTextArea.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT, 18));
+        previewPanel.add(previewMainActorTextArea, "wrap");
 
-        pp_director = new JTextArea("");
-        pp_director.setSize(200, 200);
-        pp_director.getLineWrap();
-        //pp_director.setLineWrap(true); //set new Line automatically
-        pp_director.setWrapStyleWord(true);
-        pp_director.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT, 18));
-        panel.add(pp_director, "wrap");
-
-
-        pp_mit = new JLabel("mit");
-        pp_mit.setFont(new Font("", Font.BOLD, 18));
-        panel.add(pp_mit);
-
-        pp_actors = new JTextArea("");
-        pp_actors.setSize(200, 200);
-        pp_actors.setLineWrap(true); //set new Line automatically
-        pp_actors.setWrapStyleWord(true);
-        pp_actors.setFont(new Font("", Font.LAYOUT_RIGHT_TO_LEFT,18));
-        panel.add(pp_actors, "wrap");
-
-
-        return panel;
+        return previewPanel;
     }
 
 
@@ -171,10 +145,10 @@ public class DetailView extends JPanel {
      * @return JPanel
      * @description View with formular...
      */
-    private JPanel initializeFormPanel() {
-        JPanel panel = new JPanel();
-        panel.setBackground(Color.LIGHT_GRAY);
-        panel.setLayout(new MigLayout("", //--> Layout Constraints
+    private JPanel initializeEditorPanel() {
+        JPanel editorPanel = new JPanel();
+        editorPanel.setBackground(Color.LIGHT_GRAY);
+        editorPanel.setLayout(new MigLayout("", //--> Layout Constraints
                 "10[]0[grow]50[]0[grow]", //--> Column Constraints
                 "[][][][][][][][][]"//--> Row Constraints
         ));
@@ -183,70 +157,70 @@ public class DetailView extends JPanel {
         final String TEXT_UP = "span, wrap, growx";
         final String TEXT_BOTTOM_WRAP = "growx, sg, wrap";
 
-        sp_Year = new JLabel("Jahr:");
-        panel.add(sp_Year, LABEL_WIDTH);
-        sp_YearText = new JTextField();
-        panel.add(sp_YearText, TEXT_UP);
+        JLabel editorYearOfAwardLabel = new JLabel("Jahr:");
+        editorPanel.add(editorYearOfAwardLabel, LABEL_WIDTH);
+        editorYearOfAwardTextField = new JTextField();
+        editorPanel.add(editorYearOfAwardTextField, TEXT_UP);
 
-        sp_Title = new JLabel("Titel:");
-        panel.add(sp_Title, LABEL_WIDTH);
-        sp_TitleText = new JTextField();
-        panel.add(sp_TitleText, TEXT_UP);
+        JLabel editorTitleLabel = new JLabel("Titel:");
+        editorPanel.add(editorTitleLabel, LABEL_WIDTH);
+        editorTitleTextField = new JTextField();
+        editorPanel.add(editorTitleTextField, TEXT_UP);
 
-        sp_director = new JLabel("Regisseur:");
-        panel.add(sp_director, LABEL_WIDTH);
-        sp_directorText = new JTextField();
-        panel.add(sp_directorText, TEXT_UP);
+        JLabel editorDirectorLabel = new JLabel("Regisseur:");
+        editorPanel.add(editorDirectorLabel, LABEL_WIDTH);
+        editorDirectorTextField = new JTextField();
+        editorPanel.add(editorDirectorTextField, TEXT_UP);
 
-        sp_Actor = new JLabel("Hauptdarsteller:");
-        panel.add(sp_Actor, LABEL_WIDTH);
-        sp_ActorText = new JTextField();
-        panel.add(sp_ActorText, TEXT_UP);
+        JLabel editorMainActorLabel = new JLabel("Hauptdarsteller:");
+        editorPanel.add(editorMainActorLabel, LABEL_WIDTH);
+        editorMainActorsTextField = new JTextField();
+        editorPanel.add(editorMainActorsTextField, TEXT_UP);
 
-        sp_TitleEng = new JLabel("Titel (eng):");
-        panel.add(sp_TitleEng, LABEL_WIDTH);
-        sp_TitleEngText = new JTextField();
-        panel.add(sp_TitleEngText, TEXT_UP);
+        JLabel editorTitleEnglishLabel = new JLabel("Titel (eng):");
+        editorPanel.add(editorTitleEnglishLabel, LABEL_WIDTH);
+        editorTitleEnglishTextField = new JTextField();
+        editorPanel.add(editorTitleEnglishTextField, TEXT_UP);
 
-        sp_Genre = new JLabel("Genre:");
-        panel.add(sp_Genre, LABEL_WIDTH);
-        sp_GenreText = new JTextField();
-        panel.add(sp_GenreText, TEXT_BOTTOM);
+        JLabel editorGenreLabel = new JLabel("Genre:");
+        editorPanel.add(editorGenreLabel, LABEL_WIDTH);
+        editorGenreTextField = new JTextField();
+        editorPanel.add(editorGenreTextField, TEXT_BOTTOM);
 
-        sp_ProductionYear = new JLabel("Produktionsjahr:");
-        panel.add(sp_ProductionYear, LABEL_WIDTH);
-        sp_ProductionYearText = new JTextField();
-        panel.add(sp_ProductionYearText, TEXT_BOTTOM_WRAP);
+        JLabel editorProductionYearLabel = new JLabel("Produktionsjahr:");
+        editorPanel.add(editorProductionYearLabel, LABEL_WIDTH);
+        editorProductionYearTextField = new JTextField();
+        editorPanel.add(editorProductionYearTextField, TEXT_BOTTOM_WRAP);
 
-        sp_Country = new JLabel("Land:");
-        panel.add(sp_Country, LABEL_WIDTH);
-        sp_CountryText = new JTextField();
-        panel.add(sp_CountryText, TEXT_BOTTOM);
+        JLabel editorCountryLabel = new JLabel("Land:");
+        editorPanel.add(editorCountryLabel, LABEL_WIDTH);
+        editorCountryTextField = new JTextField();
+        editorPanel.add(editorCountryTextField, TEXT_BOTTOM);
 
-        sp_Duration = new JLabel("Spieldauer:");
-        panel.add(sp_Duration, LABEL_WIDTH);
-        sp_DurationModel = new SpinnerNumberModel(1, 1, 1000, 1);
-        sp_DurationText = new JSpinner(sp_DurationModel);
-        panel.add(sp_DurationText, TEXT_BOTTOM_WRAP);
+        JLabel editorDurationLabel = new JLabel("Spieldauer:");
+        editorPanel.add(editorDurationLabel, LABEL_WIDTH);
+        editorDurationSpinnerModel = new SpinnerNumberModel(1, 1, 1000, 1);
+        JSpinner editorDurationSpinner = new JSpinner(editorDurationSpinnerModel);
+        editorPanel.add(editorDurationSpinner, TEXT_BOTTOM_WRAP);
 
-        sp_Fsk = new JLabel("FSK:");
-        panel.add(sp_Fsk, LABEL_WIDTH);
-        sp_FskModel = new SpinnerNumberModel(0, 0, 21, 1);
-        sp_FskText = new JSpinner(sp_FskModel);
-        panel.add(sp_FskText, TEXT_BOTTOM);
+        JLabel editorFskLabel = new JLabel("FSK:");
+        editorPanel.add(editorFskLabel, LABEL_WIDTH);
+        editorFskSpinnerModel = new SpinnerNumberModel(0, 0, 21, 1);
+        JSpinner editorFskSpinner = new JSpinner(editorFskSpinnerModel);
+        editorPanel.add(editorFskSpinner, TEXT_BOTTOM);
 
-        sp_ReleaseDate = new JLabel("Releasedatum:");
-        panel.add(sp_ReleaseDate, LABEL_WIDTH);
-        sp_ReleaseDateText = new JTextField();
-        panel.add(sp_ReleaseDateText, TEXT_BOTTOM_WRAP);
+        JLabel editorReleaseDateLabel = new JLabel("Releasedatum:");
+        editorPanel.add(editorReleaseDateLabel, LABEL_WIDTH);
+        editorReleaseDateTextField = new JTextField();
+        editorPanel.add(editorReleaseDateTextField, TEXT_BOTTOM_WRAP);
 
-        sp_Oscars = new JLabel("Oscars:");
-        panel.add(sp_Oscars, LABEL_WIDTH);
-        sp_OscarsModel = new SpinnerNumberModel(1, 1, 20, 1);
-        sp_OscarsText = new JSpinner(sp_OscarsModel);
-        panel.add(sp_OscarsText, TEXT_BOTTOM);
+        JLabel editorNumberOfOscarsLabel = new JLabel("Oscars:");
+        editorPanel.add(editorNumberOfOscarsLabel, LABEL_WIDTH);
+        editorNumberOfOscarsSpinnerModel = new SpinnerNumberModel(1, 1, 20, 1);
+        JSpinner editorNumberOfOscarsSpinner = new JSpinner(editorNumberOfOscarsSpinnerModel);
+        editorPanel.add(editorNumberOfOscarsSpinner, TEXT_BOTTOM);
 
-        return panel;
+        return editorPanel;
     }
 
     /**
@@ -254,73 +228,73 @@ public class DetailView extends JPanel {
      */
     private void addEvents() {
 
-        sp_TitleText.addKeyListener(new KeyAdapter() {
+        editorTitleTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.setValueAtSelectedRow(sp_TitleText.getText(), TableView.TableModel.COL_TITLE);
-                pp_title.setText(model.getMovieById(model.getSelectedMovieId()).getTitle());
+                controller.setValueAtSelectedRow(editorTitleTextField.getText(), TableView.TableModel.COL_TITLE);
+                previewTitleTextArea.setText(model.getMovieById(model.getSelectedMovieId()).getTitle());
             }
         });
 
-        sp_YearText.addKeyListener(new KeyAdapter() {
+        editorYearOfAwardTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.setValueAtSelectedRow(sp_YearText.getText(), TableView.TableModel.COL_YEAR);
+                controller.setValueAtSelectedRow(editorYearOfAwardTextField.getText(), TableView.TableModel.COL_YEAR);
             }
         });
 
-        sp_directorText.addKeyListener(new KeyAdapter() {
+        editorDirectorTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.setValueAtSelectedRow(sp_directorText.getText(), TableView.TableModel.COL_DIRECTOR);
-                pp_director.setText(model.getMovieById(model.getSelectedMovieId()).getDirector());
+                controller.setValueAtSelectedRow(editorDirectorTextField.getText(), TableView.TableModel.COL_DIRECTOR);
+                previewDirectorTextArea.setText(model.getMovieById(model.getSelectedMovieId()).getDirector());
             }
         });
 
-        sp_ActorText.addKeyListener(new KeyAdapter() {
+        editorMainActorsTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.setValueAtSelectedRow(sp_ActorText.getText(), TableView.TableModel.COL_MAIN_ACTOR);
-                pp_actors.setText(model.getMovieById(model.getSelectedMovieId()).getMainActor());
+                controller.setValueAtSelectedRow(editorMainActorsTextField.getText(), TableView.TableModel.COL_MAIN_ACTOR);
+                previewMainActorTextArea.setText(model.getMovieById(model.getSelectedMovieId()).getMainActor());
             }
         });
 
-        sp_OscarsModel.addChangeListener(e -> controller.onChangeNumberOfOscars((int) sp_OscarsModel.getValue()));
-        sp_DurationModel.addChangeListener(e -> controller.onChangeDuration((int) sp_DurationModel.getValue()));
-        sp_FskModel.addChangeListener(e -> controller.onChangeFsk((int) sp_FskModel.getValue()));
+        editorNumberOfOscarsSpinnerModel.addChangeListener(e -> controller.onChangeNumberOfOscars((int) editorNumberOfOscarsSpinnerModel.getValue()));
+        editorDurationSpinnerModel.addChangeListener(e -> controller.onChangeDuration((int) editorDurationSpinnerModel.getValue()));
+        editorFskSpinnerModel.addChangeListener(e -> controller.onChangeFsk((int) editorFskSpinnerModel.getValue()));
 
-        sp_CountryText.addKeyListener(new KeyAdapter() {
+        editorCountryTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeCountry(sp_CountryText.getText());
+                controller.onChangeCountry(editorCountryTextField.getText());
             }
         });
 
-        sp_GenreText.addKeyListener(new KeyAdapter() {
+        editorGenreTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeGenre(sp_GenreText.getText());
+                controller.onChangeGenre(editorGenreTextField.getText());
             }
         });
 
-        sp_ReleaseDateText.addKeyListener(new KeyAdapter() {
+        editorReleaseDateTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeStartDate(sp_ReleaseDateText.getText());
+                controller.onChangeStartDate(editorReleaseDateTextField.getText());
             }
         });
 
-        sp_TitleEngText.addKeyListener(new KeyAdapter() {
+        editorTitleEnglishTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeTitleEnglish(sp_TitleEngText.getText());
+                controller.onChangeTitleEnglish(editorTitleEnglishTextField.getText());
             }
         });
 
-        sp_ProductionYearText.addKeyListener(new KeyAdapter() {
+        editorProductionYearTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeYearOfProduction(sp_ProductionYearText.getText());
+                controller.onChangeYearOfProduction(editorProductionYearTextField.getText());
             }
         });
 
@@ -329,24 +303,33 @@ public class DetailView extends JPanel {
     public void addObservers() {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
-
             Movie movie = academyModel.getMovieById(academyModel.getSelectedMovieId());
 
-            sp_YearText.setBackground(
-                    (MovieValidator.isValidYear(
-                            movie.getYearOfAward()
-                    )?Color.white:Color.red)
-            );
-
+            validateTextField(MovieValidator.isValidYear(movie.getYearOfAward()), editorYearOfAwardTextField);
+            validateTextField(MovieValidator.isRequired(movie.getTitle()), editorTitleTextField);
+            validateTextField(MovieValidator.isRequired(movie.getDirector()), editorDirectorTextField);
+            validateTextField(MovieValidator.isRequired(movie.getMainActor()), editorMainActorsTextField);
 
             showData();
         });
     }
 
+    public void validateTextField(boolean ok, JTextField field ){
+        if(ok){
+            setTextFieldStyle(field, VALID_BACKGROUND, VALID_COLOR);
+        }else{
+            setTextFieldStyle(field, INVALID_BACKGROUND, INVALID_COLOR);
+        }
+    }
+
+    public void setTextFieldStyle(JTextField field, Color bg, Color color) {
+        field.setBackground(bg);
+        field.setForeground(color);
+    }
+
     public ImageIcon getPoster() {
         String targetPoster = PATH_POSTERS + model.getSelectedMovieId() + ".jpg";
         ImageIcon poster;
-
         if (getClass().getResource(targetPoster) != null) {
             poster = new ImageIcon(getClass().getResource(targetPoster).getFile());
         } else {
@@ -359,28 +342,27 @@ public class DetailView extends JPanel {
     public void showData() {
         Movie movie = model.getMovieById(model.getSelectedMovieId());
 
-        pp_year.setText(movie.getYearOfAward());
-        pp_title.setText(movie.getTitle());
-        pp_director.setText(movie.getDirector());
-        pp_actors.setText(movie.getMainActor());
+        previewYearOfAwardLabel.setText(movie.getYearOfAward());
+        previewTitleTextArea.setText(movie.getTitle());
+        previewDirectorTextArea.setText(movie.getDirector());
+        previewMainActorTextArea.setText(movie.getMainActor());
 
         ImageIcon poster = getPoster();
-        pp_poster.setIcon(poster);
-        pp_poster.updateUI();
+        previewPosterLabel.setIcon(poster);
+        previewPosterLabel.updateUI();
 
-        sp_YearText.setText(movie.getYearOfAward());
-        sp_TitleText.setText(movie.getTitle());
-        sp_directorText.setText(movie.getDirector());
-        sp_ActorText.setText(movie.getMainActor());
-        sp_TitleEngText.setText(movie.getTitleEnglish());
-        sp_GenreText.setText(movie.getGenre());
-        sp_ProductionYearText.setText(movie.getYearOfProduction());
-        sp_CountryText.setText(movie.getCountry());
-        sp_ReleaseDateText.setText(movie.getStartDate());
-
-        sp_FskModel.setValue(movie.getFsk());
-        sp_OscarsModel.setValue(movie.getNumberOfOscars());
-        sp_DurationModel.setValue(movie.getDuration());
+        editorYearOfAwardTextField.setText(movie.getYearOfAward());
+        editorTitleTextField.setText(movie.getTitle());
+        editorDirectorTextField.setText(movie.getDirector());
+        editorMainActorsTextField.setText(movie.getMainActor());
+        editorTitleEnglishTextField.setText(movie.getTitleEnglish());
+        editorGenreTextField.setText(movie.getGenre());
+        editorProductionYearTextField.setText(movie.getYearOfProduction());
+        editorCountryTextField.setText(movie.getCountry());
+        editorReleaseDateTextField.setText(movie.getStartDate());
+        editorFskSpinnerModel.setValue(movie.getFsk());
+        editorNumberOfOscarsSpinnerModel.setValue(movie.getNumberOfOscars());
+        editorDurationSpinnerModel.setValue(movie.getDuration());
 
         generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
@@ -388,20 +370,20 @@ public class DetailView extends JPanel {
     }
 
     public void generateOscarIconsSet(Movie movie) {
-        pp_oscars.removeAll();
+        previewNumberOfOscarsPanel.removeAll();
         for (int i = 0; i < movie.getNumberOfOscars(); ++i) {
             JLabel oscarLabel = new JLabel();
             ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
             oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
             oscarLabel.setIcon(oscar);
-            pp_oscars.add(oscarLabel);
+            previewNumberOfOscarsPanel.add(oscarLabel);
         }
-        pp_oscars.updateUI();
+        previewNumberOfOscarsPanel.updateUI();
     }
 
     //FLAG
     public void generateFlagIconsSet(Movie movie) {
-        pp_flag.removeAll();
+        previewCountryFlagsPanel.removeAll();
         String country = movie.getCountry();
 
         if (country != null) {
@@ -409,43 +391,18 @@ public class DetailView extends JPanel {
             country = country.trim();
 
             String[] countries = country.split("/");
-            for (int i = 0; i < countries.length; i++) {
-                String targetFlag = PATH_FLAGS + countries[i].trim() + ".png";
+            for (String country1 : countries) {
+                String targetFlag = PATH_FLAGS + country1.trim() + ".png";
                 JLabel flagLabel = new JLabel();
                 if (getClass().getResource(targetFlag) != null) {
                     ImageIcon flag = new ImageIcon(getClass().getResource(targetFlag).getFile());
                     flagLabel.setIcon(flag);
                 }
-                pp_flag.add(flagLabel);
+                previewCountryFlagsPanel.add(flagLabel);
             }
         }
-        pp_flag.updateUI();
+        previewCountryFlagsPanel.updateUI();
 
     }
-
-    //public static boolean isNumeric(String value) {
-//        try {
-//            int number = Integer.parseInt(value);
-//            return true;
-//            } catch (NumberFormatException e)
-//          return false;
-//        }
-//    }
-
-    //FLAG
-//    public String setFlag(String allFlags) {
-//        StringBuilder stringFlag = new StringBuilder(allFlags);
-//        String help, targetFlag;
-//        for (int i = 0; i < stringFlag.length(); ++i) {
-//            if (stringFlag.charAt(i) == ' ' || stringFlag.charAt(i) == ',' || stringFlag.charAt(i) == ';') {
-//                help = stringFlag.substring(i - 2, i);
-//                targetFlag = "../resources/flags_iso/24/" + help + ".png";
-//                return targetFlag;
-//            }
-//        }
-//        help = (stringFlag.substring(stringFlag.length() - 2, stringFlag.length()));
-//        targetFlag = "../resources/flags_iso/24/" + help + ".png";
-//        return targetFlag;
-//    }
 
 }
