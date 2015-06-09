@@ -44,10 +44,14 @@ public class DetailView extends JPanel {
     private JTextField editorGenreTextField;
     private JTextField editorProductionYearTextField;
     private JTextField editorCountryTextField;
-    private JTextField editorReleaseDateTextField;
+    private JTextField editorStartDateTextField;
     private SpinnerModel editorFskSpinnerModel;
     private SpinnerModel editorDurationSpinnerModel;
     private SpinnerModel editorNumberOfOscarsSpinnerModel;
+
+    private JSpinner editorFskSpinner;
+    private JSpinner editorDurationSpinner;
+    private JSpinner editorNumberOfOscarsSpinner;
 
 
     /**
@@ -192,24 +196,24 @@ public class DetailView extends JPanel {
         JLabel editorDurationLabel = new JLabel("Spieldauer:");
         editorPanel.add(editorDurationLabel, LABEL_WIDTH);
         editorDurationSpinnerModel = new SpinnerNumberModel(1, 1, 1000, 1);
-        JSpinner editorDurationSpinner = new JSpinner(editorDurationSpinnerModel);
+        editorDurationSpinner = new JSpinner(editorDurationSpinnerModel);
         editorPanel.add(editorDurationSpinner, TEXT_BOTTOM_WRAP);
 
         JLabel editorFskLabel = new JLabel("FSK:");
         editorPanel.add(editorFskLabel, LABEL_WIDTH);
         editorFskSpinnerModel = new SpinnerNumberModel(0, 0, 21, 1);
-        JSpinner editorFskSpinner = new JSpinner(editorFskSpinnerModel);
+        editorFskSpinner = new JSpinner(editorFskSpinnerModel);
         editorPanel.add(editorFskSpinner, TEXT_BOTTOM);
 
         JLabel editorReleaseDateLabel = new JLabel("Releasedatum:");
         editorPanel.add(editorReleaseDateLabel, LABEL_WIDTH);
-        editorReleaseDateTextField = new JTextField();
-        editorPanel.add(editorReleaseDateTextField, TEXT_BOTTOM_WRAP);
+        editorStartDateTextField = new JTextField();
+        editorPanel.add(editorStartDateTextField, TEXT_BOTTOM_WRAP);
 
         JLabel editorNumberOfOscarsLabel = new JLabel("Oscars:");
         editorPanel.add(editorNumberOfOscarsLabel, LABEL_WIDTH);
         editorNumberOfOscarsSpinnerModel = new SpinnerNumberModel(1, 1, 20, 1);
-        JSpinner editorNumberOfOscarsSpinner = new JSpinner(editorNumberOfOscarsSpinnerModel);
+        editorNumberOfOscarsSpinner = new JSpinner(editorNumberOfOscarsSpinnerModel);
         editorPanel.add(editorNumberOfOscarsSpinner, TEXT_BOTTOM);
 
         return editorPanel;
@@ -269,10 +273,10 @@ public class DetailView extends JPanel {
             }
         });
 
-        editorReleaseDateTextField.addKeyListener(new KeyAdapter() {
+        editorStartDateTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                controller.onChangeStartDate(editorReleaseDateTextField.getText());
+                controller.onChangeStartDate(editorStartDateTextField.getText());
             }
         });
 
@@ -297,14 +301,35 @@ public class DetailView extends JPanel {
             AcademyModel academyModel = (AcademyModel) m;
             Movie movie = academyModel.getMovieById(academyModel.getSelectedMovieId());
 
-            validateTextField(MovieValidator.isValidYear(movie.getYearOfAward()), editorYearOfAwardTextField);
-            validateTextField(MovieValidator.isRequired(movie.getYearOfAward()), editorYearOfAwardTextField);
+            validateTextField(
+                    MovieValidator.isRequired(movie.getYearOfAward()) && MovieValidator.isValidYear(movie.getYearOfAward()),
+                    editorYearOfAwardTextField
+            );
             validateTextField(MovieValidator.isRequired(movie.getTitle()), editorTitleTextField);
             validateTextField(MovieValidator.isRequired(movie.getDirector()), editorDirectorTextField);
             validateTextField(MovieValidator.isRequired(movie.getMainActor()), editorMainActorsTextField);
+            validateTextField(MovieValidator.isValidYear(movie.getYearOfProduction()), editorProductionYearTextField);
+            validateTextField(MovieValidator.isDate(movie.getStartDate()), editorStartDateTextField);
+            validateTextField(MovieValidator.isFlag(movie.getCountry()), editorCountryTextField);
+            validateSpinnerModel(MovieValidator.isNumber(movie.getFsk().toString()), editorFskSpinner);
+            validateSpinnerModel(MovieValidator.isNumber(movie.getNumberOfOscars().toString()), editorNumberOfOscarsSpinner);
+            validateSpinnerModel(MovieValidator.isNumber(movie.getDuration().toString()), editorDurationSpinner);
 
             showData();
         });
+    }
+
+    public void validateSpinnerModel(boolean ok, JSpinner field) {
+        if (ok) {
+            setSpinnerStyle(field, VALID_BACKGROUND, VALID_COLOR);
+        } else {
+            setSpinnerStyle(field, INVALID_BACKGROUND, INVALID_COLOR);
+        }
+    }
+
+    public void setSpinnerStyle(JSpinner field, Color bg, Color color) {
+        field.setBackground(bg);
+        field.setForeground(color);
     }
 
     public void validateTextField(boolean ok, JTextField field) {
@@ -344,22 +369,35 @@ public class DetailView extends JPanel {
         previewPosterLabel.setIcon(poster);
         previewPosterLabel.updateUI();
 
-        editorYearOfAwardTextField.setText(movie.getYearOfAward());
-        editorTitleTextField.setText(movie.getTitle());
-        editorDirectorTextField.setText(movie.getDirector());
-        editorMainActorsTextField.setText(movie.getMainActor());
-        editorTitleEnglishTextField.setText(movie.getTitleEnglish());
-        editorGenreTextField.setText(movie.getGenre());
-        editorProductionYearTextField.setText(movie.getYearOfProduction());
-        editorCountryTextField.setText(movie.getCountry());
-        editorReleaseDateTextField.setText(movie.getStartDate());
-        editorFskSpinnerModel.setValue(movie.getFsk());
-        editorNumberOfOscarsSpinnerModel.setValue(movie.getNumberOfOscars());
-        editorDurationSpinnerModel.setValue(movie.getDuration());
+        updateTextField(editorYearOfAwardTextField, movie.getYearOfAward());
+        updateTextField(editorTitleTextField, movie.getTitle());
+        updateTextField(editorDirectorTextField, movie.getDirector());
+        updateTextField(editorMainActorsTextField, movie.getMainActor());
+        updateTextField(editorTitleEnglishTextField, movie.getTitleEnglish());
+        updateTextField(editorGenreTextField, movie.getGenre());
+        updateTextField(editorProductionYearTextField, movie.getYearOfProduction());
+        updateTextField(editorCountryTextField, movie.getCountry());
+        updateTextField(editorStartDateTextField, movie.getStartDate());
+
+        updateSpinnerModel(editorFskSpinnerModel, movie.getFsk());
+        updateSpinnerModel(editorNumberOfOscarsSpinnerModel, movie.getNumberOfOscars());
+        updateSpinnerModel(editorDurationSpinnerModel, movie.getDuration());
 
         generateFlagIconsSet(movie);
         generateOscarIconsSet(movie);
 
+    }
+
+    public void updateSpinnerModel(SpinnerModel field, Integer value){
+        if(!field.getValue().equals(value)){
+            field.setValue(value);
+        }
+    }
+
+    public void updateTextField(JTextField field, String value){
+        if(!field.getText().equals(value)){
+            field.setText(value);
+        }
     }
 
     public void generateOscarIconsSet(Movie movie) {
