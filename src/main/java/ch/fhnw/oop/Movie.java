@@ -4,9 +4,11 @@ import com.sun.deploy.util.StringUtils;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
-public class Movie {
+
+public class Movie implements Comparator<Movie>, Comparable<Movie> {
 
     /**
      * Variables
@@ -14,6 +16,7 @@ public class Movie {
     private static final String DELIMITER_NEXT_DATA = ";";
 
     private boolean hasModified = false;
+    private boolean isValid = true;
 
     //#id;Title;yearOfAward;director;mainActor;titleEnglish;yearOfProduction;country;duration;fsk;genre;startDate
     private Integer id;
@@ -36,6 +39,7 @@ public class Movie {
      */
     public Movie() {
         this.hasModified = true;
+        this.isValid = false;
         this.fsk = 0;
         this.duration = 1;
         this.numberOfOscars = 1;
@@ -45,6 +49,7 @@ public class Movie {
     public Movie(Integer id) {
         this.id = id;
         this.hasModified = true;
+        this.isValid = false;
         this.fsk = 0;
         this.duration = 1;
         this.numberOfOscars = 1;
@@ -53,6 +58,7 @@ public class Movie {
 
     public Movie(String csvLine) {
         String[] splitted = csvLine.split(DELIMITER_NEXT_DATA);
+        this.isValid = true;
         this.id = Integer.parseInt(splitted[0]);
         this.title = splitted[1];
         this.yearOfAward = splitted[2];
@@ -208,7 +214,6 @@ public class Movie {
         return !newValue.equals(oldValue);
     }
 
-
     @Override
     public String toString() {
         List<String> rows = new ArrayList<>();
@@ -227,5 +232,59 @@ public class Movie {
         rows.add(this.numberOfOscars.toString());
         return StringUtils.join(rows, DELIMITER_NEXT_DATA);
     }
+
+    public boolean isValid() {
+        return isValid;
+    }
+
+    public void setIsValid(boolean isValid) {
+        this.isValid = isValid;
+    }
+
+    @Override
+    public int compareTo(Movie compareMovie) {
+        return this.compare(this, compareMovie);
+    }
+
+    @Override
+    public int compare(Movie m1, Movie m2) {
+        int y1 = Integer.parseInt((m1.getYearOfAward()==null)?"0":m1.getYearOfAward());
+        int y2 = Integer.parseInt((m2.getYearOfAward()==null)?"0":m2.getYearOfAward());
+        return y2 - y1;
+    }
+
+//    @Override
+//    public int compare(Movie o1, Movie o2) {
+//        return 0;
+//    }
+
+//    public static final Comparator<Movie> SENIORITY_ORDER =
+//            new Comparator<Movie>() {
+//                public int compare(Movie e1, Movie e2) {
+//                    int dateCmp = e2.compareTo(e1);
+//                    if (dateCmp != 0)
+//                        return dateCmp;
+//
+//                    return (Integer.parseInt(e1.getYearOfAward()) < Integer.parseInt(e2.getYearOfAward()) ? -1 :
+//                            (Integer.parseInt(e1.getYearOfAward()) == Integer.parseInt(e2.getYearOfAward()) ? 0 : 1));
+//                }
+//            };
+
+//    public static Comparator<Movie> MovieNameComparator
+//            = new Comparator<Movie>() {
+//
+//        public int compare(Movie movie1, Movie movie2) {
+//
+//            int movieYear1 = Integer.parseInt(movie1.getYearOfAward());
+//            int movieYear2 = Integer.parseInt(movie2.getYearOfAward());
+//
+//            //ascending order
+//            return movieYear2.compareTo(movieYear1);
+//
+//            //descending order
+//            //return fruitName2.compareTo(fruitName1);
+//        }
+//
+//    };
 
 }

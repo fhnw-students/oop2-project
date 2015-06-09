@@ -104,7 +104,11 @@ public class ToolbarView extends JToolBar {
         model.addObserver(m -> {
             AcademyModel academyModel = (AcademyModel) m;
 
-            saveButton.setEnabled(academyModel.hasModelBeenChanged() && academyModel.editorIsValid());
+            saveButton.setEnabled(
+                    academyModel.hasModelBeenChanged()
+                            && academyModel.editorIsValid()
+                            && academyModel.areAllMoviesValid()
+            );
 
         });
     }

@@ -120,7 +120,9 @@ public class TableView extends JTable {
                 Movie movie = model.getMovieByIndex(row);
                 if (movie.getId().equals(model.getSelectedMovieId())) {
                     path = TableModel.MARK_BLUE;
-                } else if (movie.isHasModified()) {
+                } else if (!movie.isValid()) {
+                    path = TableModel.MARK_RED;
+                }else if (movie.isHasModified()) {
                     path = TableModel.MARK_ORANGE;
                 }
                 URL imageURL = TableView.class.getResource(path);

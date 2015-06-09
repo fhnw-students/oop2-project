@@ -39,6 +39,7 @@ public class AcademyModel implements Observable {
     }
 
     public List<Movie> getFilteredList() {
+//        Collections.sort(filterdList);
         return filterdList;
     }
 
@@ -264,7 +265,6 @@ public class AcademyModel implements Observable {
                         )
                 );
 
-
                 // Add header line
                 br.write(csvFileHeader);
                 br.newLine();
@@ -290,7 +290,6 @@ public class AcademyModel implements Observable {
 
     }
 
-
     public String getSearchValue() {
         return searchValue;
     }
@@ -311,8 +310,18 @@ public class AcademyModel implements Observable {
 
     }
 
+    public boolean areAllMoviesValid(){
+        long counter = this.list.stream()
+                .map(Movie::isValid)
+                .filter(b -> !b)
+                .count();
+        return counter == 0;
+    }
+
     public boolean editorIsValid() {
         Movie movie = getMovieById(getSelectedMovieId());
+
+        movie.setIsValid(false);
 
         if (!MovieValidator.isValidYear(movie.getYearOfAward())) {
             return false;
@@ -350,6 +359,7 @@ public class AcademyModel implements Observable {
             return false;
         }
 
+        movie.setIsValid(true);
         return true;
     }
 
