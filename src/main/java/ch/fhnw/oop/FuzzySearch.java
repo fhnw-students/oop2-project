@@ -10,24 +10,33 @@ public class FuzzySearch {
 
     private List<FuzzySearchItem> fuzzySearchItems;
 
-    FuzzySearch(AcademyModel academyModel){
+    FuzzySearch(AcademyModel academyModel) {
         this.fuzzySearchItems = academyModel.getList().stream().map(FuzzySearchItem::new).collect(Collectors.toList());
     }
 
     public List<Movie> filter(String searchValue) {
-        for (FuzzySearchItem item : fuzzySearchItems){
-            item.setDistance(
-                    item.getMovie().getTitle().length() -
-                    LevenshteinDistance(
-                            item.getMovie().getTitle().toUpperCase(),
-                            searchValue.toUpperCase()
-                    )
-            );
+        for (FuzzySearchItem item : fuzzySearchItems) {
+            if (item.getMovie().getTitle() != null) {
+                item.setDistance(
+                        item.getMovie().getTitle().length() -
+                                LevenshteinDistance(
+                                        item.getMovie().getTitle().toUpperCase(),
+                                        searchValue.toUpperCase()
+                                )
+                );
+            } else {
+                item.setDistance(null);
+            }
         }
 
-        Integer max = fuzzySearchItems.stream().map(FuzzySearchItem::getDistance).max(Integer::compare).get();
+        Integer max = fuzzySearchItems.stream()
+                .map(FuzzySearchItem::getDistance)
+                .filter(i -> i != null)
+                .max(Integer::compare)
+                .get();
 
         return fuzzySearchItems.stream()
+                .filter(fuzzySearchItem -> fuzzySearchItem.getDistance() != null)
                 .filter(fuzzySearchItem -> fuzzySearchItem.getDistance().equals(max))
                 .map(FuzzySearchItem::getMovie)
                 .collect(Collectors.toList());
