@@ -16,6 +16,7 @@ public class DetailView extends JPanel {
     public static String PATH_POSTERS = "../resources/poster/";
     public static String IMAGE_NO_POSTERS = "../resources/poster/no_poster.gif";
     public static String PATH_FLAGS = "../resources/flags_iso/24/";
+    public static String PATH_OSCAR = "../resources/Oscar-logo.jpg";
 
     public static Color VALID_BACKGROUND = new Color(255, 255, 255);
     public static Color INVALID_BACKGROUND = new Color(132, 76, 76);
@@ -365,7 +366,7 @@ public class DetailView extends JPanel {
         previewNumberOfOscarsPanel.removeAll();
         for (int i = 0; i < movie.getNumberOfOscars(); ++i) {
             JLabel oscarLabel = new JLabel();
-            ImageIcon oscar = new ImageIcon(getClass().getResource("../resources/Oscar-logo.jpg"));
+            ImageIcon oscar = new ImageIcon(getClass().getResource(PATH_OSCAR));
             oscar.setImage(oscar.getImage().getScaledInstance(25, 50, Image.SCALE_DEFAULT));
             oscarLabel.setIcon(oscar);
             previewNumberOfOscarsPanel.add(oscarLabel);
